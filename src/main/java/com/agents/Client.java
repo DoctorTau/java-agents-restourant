@@ -28,10 +28,10 @@ public class Client {
 
     public void sendMessage(String message) {
         try {
-            synchronized (messageToSend) {
+            synchronized (this) {
                 messageToSend = message;
-                messageToSend.notify();
-                messageToSend.wait();
+                notify();
+                wait();
             }
 
         } catch (Exception e) {
@@ -47,13 +47,14 @@ public class Client {
                     synchronized (bufferedWriter) {
                         writeStringToBufferedWriter(clientName);
 
-                        while (socket.isConnected()) {
-                            synchronized (messageToSend) {
-                                System.out.println("Waiting for message to send");
-                                messageToSend.wait();
-                                System.out.println("Message to send: " + messageToSend);
-                                writeStringToBufferedWriter(messageToSend);
-                                messageToSend.notify();
+                        synchronized (Client.this) {
+                            while (true) {
+                                while (messageToSend.equals("")) {
+                                    Client.this.wait();
+                                }
+                                writeStringToBufferedWriter(clientName + ": " + messageToSend);
+                                messageToSend = "";
+                                Client.this.notify();
                             }
                         }
                     }
