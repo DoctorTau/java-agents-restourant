@@ -5,6 +5,7 @@ public enum MessageType {
     MenuResponse,
     OrderAdd,
     ProccesRequest,
+    ProcessRespond,
     DevicesRequest,
     ProductRequest,
     ProductResponse

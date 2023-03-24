@@ -91,13 +91,18 @@ public class Client {
                 try {
                     while (socket.isConnected()) {
                         String messageReceived = bufferedReader.readLine();
-                        System.out.println(messageReceived);
+                        Message message = Message.fromJson(messageReceived);
+                        handleMessage(message);
                     }
                 } catch (IOException e) {
                     closeEverything(socket, bufferedReader, bufferedWriter);
                 }
             }
         }).start();
+    }
+
+    protected void handleMessage(Message message) {
+        System.out.println(clientName + " received message from " + message.getSource() + ": " + message.getData());
     }
 
     private void writeStringToBufferedWriter(String messageToSend) throws IOException {
