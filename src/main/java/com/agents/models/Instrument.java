@@ -11,7 +11,7 @@ public class Instrument extends Client {
     }
 
     @Override
-    handleMessage(Message message) {
+    protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
             default:
                 break;

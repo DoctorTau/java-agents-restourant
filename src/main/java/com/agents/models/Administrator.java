@@ -12,7 +12,7 @@ public class Administrator extends Client {
     }
 
     @Override
-    handleMessage(Message message) {
+    protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
             default:
                 break;
@@ -24,8 +24,8 @@ public class Administrator extends Client {
     }
 
     private void createOrder(Message message) {
-        Order order = new Order(); // TODO: gets needed dishes from the message
-        new Thread(order);
+        // Order order = new Order(); // TODO: gets needed dishes from the message
+        // new Thread(order);
     }
 
     private void giveOrderToTheClient(Message message) {

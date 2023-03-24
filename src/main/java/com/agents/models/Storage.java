@@ -8,12 +8,13 @@ import java.util.ArrayList;
 
 public class Storage extends Client {
     ArrayList<Product> products;
+
     public Storage(Socket socket, String clientName) {
         super(socket, clientName);
     }
 
     @Override
-    handleMessage(Message message) {
+    protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
             default:
                 break;
@@ -22,7 +23,7 @@ public class Storage extends Client {
 
     private void provideCurrentMenu(Message message) {
         // TODO: gets a menu from the message, checks if the dish creation is possible,
-        //  sends a list of possible dishes back to the message sender
+        // sends a list of possible dishes back to the message sender
 
     }
 

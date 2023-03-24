@@ -11,7 +11,7 @@ public class Cooker extends Client {
     }
 
     @Override
-    handleMessage(Message message) {
+    protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
             default:
                 break;
@@ -20,11 +20,11 @@ public class Cooker extends Client {
 
     private void getAWork(Message message) {
         // TODO: gets work's length and name from the message
-        askForTheInstrument();
-        while () { // waits for the instrument
+        // askForTheInstrument();
+        // while (false) { // waits for the instrument
 
-        }
-        sleep(time)
+        // }
+        // sleep(0);
         // TODO: returns instrument and ends the work process
     }
 

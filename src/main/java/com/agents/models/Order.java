@@ -7,12 +7,13 @@ import java.net.Socket;
 
 public class Order extends Client {
     private int countOfProcessesInWork;
+
     public Order(Socket socket, String clientName) {
         super(socket, clientName);
     }
 
     @Override
-    handleMessage(Message message) {
+    protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
             default:
                 break;
@@ -20,7 +21,8 @@ public class Order extends Client {
     }
 
     private void sendOrderToTheKitchen(Message message) {
-        // TODO: creates processes for each dish (and changes the count var) in the order and sends their name to the kitchen
+        // TODO: creates processes for each dish (and changes the count var) in the
+        // order and sends their name to the kitchen
     }
 
     private void processIsDone() {

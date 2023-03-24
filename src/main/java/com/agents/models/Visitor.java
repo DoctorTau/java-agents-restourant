@@ -14,7 +14,7 @@ public class Visitor extends Client {
     }
 
     @Override
-    handleMessage(Message message) {
+    protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
             default:
                 break;
@@ -26,7 +26,8 @@ public class Visitor extends Client {
     }
 
     private void makeAnOrder(Message message) {
-        // TODO: gets menu from the message and chooses some dishes -- sends that list to the administator
+        // TODO: gets menu from the message and chooses some dishes -- sends that list
+        // to the administator
     }
 
     private void getAnOrder(Message message) {
