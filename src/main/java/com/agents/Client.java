@@ -13,7 +13,7 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientName;
-    private String messageToSend = "";
+    private Message messageToSend;
 
     private final Object messageToSendLock = new Object();
 
@@ -23,6 +23,7 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.clientName = clientName;
+            this.messageToSend.setSource(clientName);
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -30,7 +31,7 @@ public class Client {
 
     public void sendMessage(String message) {
         try {
-            messageToSend = message;
+            messageToSend.setData(message);
             synchronized (messageToSendLock) {
                 messageToSendLock.notify();
                 messageToSendLock.wait();
@@ -51,11 +52,8 @@ public class Client {
 
                         while (socket.isConnected()) {
                             synchronized (messageToSendLock) {
-                                // System.out.println("Waiting for message to send");
                                 messageToSendLock.wait();
-                                // System.out.println("Message to send: " + messageToSend);
-                                writeStringToBufferedWriter(messageToSend);
-                                messageToSend = "";
+                                writeStringToBufferedWriter(messageToSend.toJson());
                                 messageToSendLock.notify();
                             }
                         }
@@ -109,9 +107,14 @@ public class Client {
 
     public static void main(String[] args) {
         final Scanner scanner = new Scanner(System.in);
+        String clientName;
+        if (args.length == 1) {
+            clientName = args[0];
+        } else {
+            clientName = scanner.nextLine();
+        }
         try {
             System.out.println("Enter your name: ");
-            String clientName = scanner.nextLine();
             Socket socket = new Socket("localhost", 5001);
             final Client client = new Client(socket, clientName);
             client.listenForMessages();
