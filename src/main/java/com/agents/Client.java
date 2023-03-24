@@ -8,12 +8,14 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Runnable {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientName;
-    private String messageToSend = "";
+    private Message messageToSend;
+
+    private final Object messageToSendLock = new Object();
 
     public Client(Socket socket, String clientName) {
         try {
@@ -21,6 +23,7 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.clientName = clientName;
+            this.messageToSend.setSource(clientName);
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -28,10 +31,10 @@ public class Client {
 
     public void sendMessage(String message) {
         try {
-            synchronized (this) {
-                messageToSend = message;
-                notify();
-                wait();
+            messageToSend.setData(message);
+            synchronized (messageToSendLock) {
+                messageToSendLock.notify();
+                messageToSendLock.wait();
             }
 
         } catch (Exception e) {
@@ -47,14 +50,11 @@ public class Client {
                     synchronized (bufferedWriter) {
                         writeStringToBufferedWriter(clientName);
 
-                        synchronized (Client.this) {
-                            while (true) {
-                                while (messageToSend.equals("")) {
-                                    Client.this.wait();
-                                }
-                                writeStringToBufferedWriter(clientName + ": " + messageToSend);
-                                messageToSend = "";
-                                Client.this.notify();
+                        while (socket.isConnected()) {
+                            synchronized (messageToSendLock) {
+                                messageToSendLock.wait();
+                                writeStringToBufferedWriter(messageToSend.toJson());
+                                messageToSendLock.notify();
                             }
                         }
                     }
@@ -107,9 +107,14 @@ public class Client {
 
     public static void main(String[] args) {
         final Scanner scanner = new Scanner(System.in);
+        String clientName;
+        if (args.length == 1) {
+            clientName = args[0];
+        } else {
+            clientName = scanner.nextLine();
+        }
         try {
             System.out.println("Enter your name: ");
-            String clientName = scanner.nextLine();
             Socket socket = new Socket("localhost", 5001);
             final Client client = new Client(socket, clientName);
             client.listenForMessages();
@@ -125,6 +130,10 @@ public class Client {
         scanner.close();
     }
 
+    @Override
+    public void run() {
+        main(new String[0]);
+    }
 }
 
 // public void sendMessage() {
