@@ -29,6 +29,23 @@ public class Client {
         }
     }
 
+    public void sendMessage(String destination, MessageType messageType, String data) {
+        this.messageToSend.setDestination(destination);
+        this.messageToSend.setType(messageType);
+        this.messageToSend.setData(data);
+
+        try {
+            synchronized (messageToSendLock) {
+                messageToSendLock.notify();
+                messageToSendLock.wait();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Deprecated
     public void sendMessage(String message) {
         try {
             messageToSend.setData(message);
@@ -129,39 +146,4 @@ public class Client {
         }
         scanner.close();
     }
-
 }
-
-// public void sendMessage() {
-// try {
-// writeStringToBufferedWriter(clientName);
-
-// Scanner scanner = new Scanner(System.in);
-// while (socket.isConnected()) {
-// String messageToSend = scanner.nextLine();
-// writeStringToBufferedWriter(messageToSend);
-// }
-// scanner.close();
-// } catch (IOException e) {
-// closeEverything(socket, bufferedReader, bufferedWriter);
-// }
-
-// }
-
-// public static void main(String[] args) {
-// Scanner scanner = new Scanner(System.in);
-// try {
-// System.out.println("Enter your name: ");
-// String clientName = scanner.nextLine();
-// Socket socket = new Socket("localhost", 5001);
-// Client client = new Client(socket, clientName);
-// client.listenForMessages();
-// String input = scanner.nextLine();
-// while (!input.equals("exit")) {
-// client.sendMessage(input);
-// }
-// } catch (IOException e) {
-// e.printStackTrace();
-// }
-// scanner.close();
-// }

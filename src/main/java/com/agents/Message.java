@@ -7,6 +7,15 @@ public class Message {
     private String destination;
     private String source;
     private String data;
+    private MessageType type;
+
+    public MessageType getType() {
+        return type;
+    }
+
+    public void setType(MessageType type) {
+        this.type = type;
+    }
 
     public Message() {
         this.destination = "";
