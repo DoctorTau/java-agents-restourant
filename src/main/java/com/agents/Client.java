@@ -15,6 +15,8 @@ public class Client {
     private String clientName;
     private String messageToSend = "";
 
+    private final Object messageToSendLock = new Object();
+
     public Client(Socket socket, String clientName) {
         try {
             this.socket = socket;
@@ -28,10 +30,10 @@ public class Client {
 
     public void sendMessage(String message) {
         try {
-            synchronized (messageToSend) {
-                messageToSend = message;
-                messageToSend.notify();
-                messageToSend.wait();
+            messageToSend = message;
+            synchronized (messageToSendLock) {
+                messageToSendLock.notify();
+                messageToSendLock.wait();
             }
 
         } catch (Exception e) {
@@ -48,12 +50,13 @@ public class Client {
                         writeStringToBufferedWriter(clientName);
 
                         while (socket.isConnected()) {
-                            synchronized (messageToSend) {
-                                System.out.println("Waiting for message to send");
-                                messageToSend.wait();
-                                System.out.println("Message to send: " + messageToSend);
+                            synchronized (messageToSendLock) {
+                                // System.out.println("Waiting for message to send");
+                                messageToSendLock.wait();
+                                // System.out.println("Message to send: " + messageToSend);
                                 writeStringToBufferedWriter(messageToSend);
-                                messageToSend.notify();
+                                messageToSend = "";
+                                messageToSendLock.notify();
                             }
                         }
                     }
