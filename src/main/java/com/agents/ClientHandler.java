@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
@@ -31,32 +33,29 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void sendMessageByClientName(String clientName) {
-        for (ClientHandler clientHandler : clients) {
-            if (clientHandler.clientName.equals(clientName)) {
+    private void broadcastAll(String messageToSend) {
+        try {
+            Message message = Message.fromJson(messageToSend);
+            for (ClientHandler clientHandler : clients) {
                 try {
-                    clientHandler.bufferedWriter.write("SERVER " + this.clientName + " has left the server.");
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
+                    if (message.getDestination().equals("") && !clientHandler.clientName.equals(this.clientName)) {
+                        writeToWriteredBuffer(messageToSend, clientHandler);
+                    } else if (clientHandler.clientName.equals(message.getDestination())) {
+                        writeToWriteredBuffer(messageToSend, clientHandler);
+                    }
                 } catch (IOException e) {
                     closeEverything(socket, bufferedReader, bufferedWriter);
                 }
             }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
     }
 
-    private void broadcastAll(String messageToSend) {
-        for (ClientHandler clientHandler : clients) {
-            try {
-                if (!clientHandler.clientName.equals(this.clientName)) {
-                    clientHandler.bufferedWriter.write(messageToSend);
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
-                }
-            } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
-            }
-        }
+    private void writeToWriteredBuffer(String messageToSend, ClientHandler clientHandler) throws IOException {
+        clientHandler.bufferedWriter.write(messageToSend);
+        clientHandler.bufferedWriter.newLine();
+        clientHandler.bufferedWriter.flush();
     }
 
     @Override
