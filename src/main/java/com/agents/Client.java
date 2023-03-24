@@ -13,6 +13,7 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientName;
+    private String messageToSend = "";
 
     public Client(Socket socket, String clientName) {
         try {
@@ -25,20 +26,44 @@ public class Client {
         }
     }
 
-    public void sendMessage() {
+    public void sendMessage(String message) {
         try {
-            writeStringToBufferedWriter(clientName);
-
-            Scanner scanner = new Scanner(System.in);
-            while (socket.isConnected()) {
-                String messageToSend = scanner.nextLine();
-                writeStringToBufferedWriter(messageToSend);
+            synchronized (messageToSend) {
+                messageToSend = message;
+                messageToSend.notify();
+                messageToSend.wait();
             }
-            scanner.close();
-        } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
-        }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (bufferedWriter) {
+                        writeStringToBufferedWriter(clientName);
+
+                        while (socket.isConnected()) {
+                            synchronized (messageToSend) {
+                                System.out.println("Waiting for message to send");
+                                messageToSend.wait();
+                                System.out.println("Message to send: " + messageToSend);
+                                writeStringToBufferedWriter(messageToSend);
+                                messageToSend.notify();
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    closeEverything(socket, bufferedReader, bufferedWriter);
+                } catch (InterruptedException e) {
+                    // handle InterruptedException
+                }
+            }
+        }).start();
     }
 
     public void listenForMessages() {
@@ -80,17 +105,57 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
             System.out.println("Enter your name: ");
             String clientName = scanner.nextLine();
             Socket socket = new Socket("localhost", 5001);
-            Client client = new Client(socket, clientName);
+            final Client client = new Client(socket, clientName);
             client.listenForMessages();
             client.sendMessage();
+            String message = scanner.nextLine();
+            while (!"exit".equals(message)) {
+                client.sendMessage(message);
+                message = scanner.nextLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         scanner.close();
     }
+
 }
+
+// public void sendMessage() {
+// try {
+// writeStringToBufferedWriter(clientName);
+
+// Scanner scanner = new Scanner(System.in);
+// while (socket.isConnected()) {
+// String messageToSend = scanner.nextLine();
+// writeStringToBufferedWriter(messageToSend);
+// }
+// scanner.close();
+// } catch (IOException e) {
+// closeEverything(socket, bufferedReader, bufferedWriter);
+// }
+
+// }
+
+// public static void main(String[] args) {
+// Scanner scanner = new Scanner(System.in);
+// try {
+// System.out.println("Enter your name: ");
+// String clientName = scanner.nextLine();
+// Socket socket = new Socket("localhost", 5001);
+// Client client = new Client(socket, clientName);
+// client.listenForMessages();
+// String input = scanner.nextLine();
+// while (!input.equals("exit")) {
+// client.sendMessage(input);
+// }
+// } catch (IOException e) {
+// e.printStackTrace();
+// }
+// scanner.close();
+// }
