@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Runnable {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
@@ -130,6 +130,10 @@ public class Client {
         scanner.close();
     }
 
+    @Override
+    public void run() {
+        main(new String[0]);
+    }
 }
 
 // public void sendMessage() {

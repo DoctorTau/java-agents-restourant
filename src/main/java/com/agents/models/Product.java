@@ -1,11 +1,10 @@
 package com.agents.models;
 
-import com.agents.Client;
-
 import java.net.Socket;
 
-public class Product extends Client {
-    public Product(Socket socket, String clientName) {
-        super(socket, clientName);
+public class Product {
+    String id;
+    public Product(String id) {
+        this.id = id;
     }
 }
