@@ -39,6 +39,9 @@ public class Storage extends Client {
                 case OrderRequest:
                     reserveProductsForMenu(message);
                     break;
+                case ProcessRequest:
+                    sendProduct(message);
+                    break;
                 default:
                     break;
             }
@@ -87,7 +90,21 @@ public class Storage extends Client {
         }
     }
 
-    private void removeAProduct(Message message) {
-        // TODO: gets a requisted product id from the message, removes it from the list
+    private void sendProduct(Message message) {
+        String productId = message.getData();
+        for (Product product : products) {
+            if (product.getId().equals(productId) && product.getStatus() == Product.ProductStatus.RESERVED) {
+                Message productMessage = new Message(message.getSource(), AgentNames.STORAGE,
+                        MessageType.ProductResponse,
+                        product.getId());
+                removeProduct(product);
+            }
+        }
+
+        // TODO: send message to logger that there is no such product
+    }
+
+    private void removeProduct(Product product) {
+        products.remove(product);
     }
 }

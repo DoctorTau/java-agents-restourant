@@ -1,11 +1,17 @@
 package com.agents.models;
 
+import com.agents.AgentNames;
 import com.agents.Client;
 import com.agents.Message;
+import com.agents.MessageType;
+import com.agents.Product;
 
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Cooker extends Client {
+    private ArrayList<Product> products;
+
     public Cooker(Socket socket, String clientName) {
         super(socket, clientName);
     }
@@ -13,6 +19,9 @@ public class Cooker extends Client {
     @Override
     protected void handleMessage(Message message) {
         switch (message.getType()) {// TODO
+            case ProductResponse:
+                getProduct(message);
+                break;
             default:
                 break;
         }
@@ -26,6 +35,22 @@ public class Cooker extends Client {
         // }
         // sleep(0);
         // TODO: returns instrument and ends the work process
+    }
+
+    private void askForPoduct(Product product) {
+        try {
+            // Sends a request for the product to the storage. In request body is the
+            // product's id.
+            Message message = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
+                    product.getId());
+            sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getProduct(Message message) {
+        products.add(new Product(message.getData()));
     }
 
     private void askForTheInstrument(Message message) {
