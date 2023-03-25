@@ -9,10 +9,10 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client implements Runnable {
-    private Socket socket;
+    protected Socket socket;
+    protected String clientName;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    protected String clientName;
     private Message messageToSend;
 
     private final Object messageToSendLock = new Object();

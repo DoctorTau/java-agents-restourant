@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 
 public class Menu {
-    private final ArrayList<Dish> dishes;
+    private ArrayList<Dish> dishes;
 
     public Menu() {
         dishes = new ArrayList<>();
@@ -18,6 +18,10 @@ public class Menu {
 
     public ArrayList<Dish> getDishes() {
         return dishes;
+    }
+
+    public void setDishes(ArrayList<Dish> dishes) {
+        this.dishes = dishes;
     }
 
     public String toJson() throws JsonProcessingException {

@@ -5,9 +5,11 @@ public enum MessageType {
     MenuResponse, // response for menu (from storage to admin and from admin to customer)
     OrderAdd,
     OrderRequest,
-    OrderGiveAway,
-    ProccesRequest,
+    OrderRespond,
+    ProcessRequest,
     ProcessRespond,
+    WorkRequest,
+    WorkRespond,
     DevicesRequest,
     ProductRequest,
     ProductResponse
