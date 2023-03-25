@@ -39,6 +39,18 @@ public class Message {
     /**
      * @param destination destination agent name
      * @param source      source agent name
+     * @param type        message type
+     */
+    public Message(String destination, String source, MessageType type) {
+        this.destination = destination;
+        this.source = source;
+        this.type = type;
+        this.data = "";
+    }
+
+    /**
+     * @param destination destination agent name
+     * @param source      source agent name
      * @param data        message data
      */
     public Message(String destination, String source, String data) {

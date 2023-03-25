@@ -41,18 +41,14 @@ public class Order extends Client {
                 Process process = new Process(socket, processName, this.clientName, dish.getTime());
                 new Thread(process);
 
-                Message processAdd = new Message();
-                processAdd.setDestination("Kichen"); // TODO: implement normal kitchen name
-                processAdd.setSource(this.clientName);
-                processAdd.setType(MessageType.ProcessRequest);
-                processAdd.setData(dish.toJson());
+                Message processAdd = new Message(AgentNames.KITCHEN, this.clientName, MessageType.ProcessRequest,
+                        dish.toJson());
 
-                sendMessage(processAdd.toJson());
+                sendMessage(processAdd);
             }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO
         }
     }
 
@@ -65,16 +61,12 @@ public class Order extends Client {
 
     private void orderIsReady() {
         try {
-            Message orderNotification = new Message();
-            orderNotification.setSource(this.clientName);
-            orderNotification.setDestination("Administrator"); // TODO: implement normal administrator name
-            orderNotification.setType(MessageType.OrderRespond);
-            orderNotification.setData(visitorName);
+            Message orderNotification = new Message(AgentNames.ADMIN, this.clientName, MessageType.OrderRespond,
+                    visitorName);
 
-            sendMessage(orderNotification.toJson());
+            sendMessage(orderNotification);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO
         }
     }
 }

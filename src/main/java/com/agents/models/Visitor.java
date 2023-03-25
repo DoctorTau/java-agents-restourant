@@ -1,7 +1,6 @@
 package com.agents.models;
 
 import com.agents.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Visitor extends Client {
-    private String adminName = AgentNames.ADMIN;
 
     public Visitor(Socket socket, String clientName) {
         super(socket, clientName);
@@ -41,15 +39,11 @@ public class Visitor extends Client {
 
     private void askForTheMenu() {
         try {
-            Message menuRequest = new Message();
-            menuRequest.setDestination("Administrator");
-            menuRequest.setSource(this.clientName);
-            menuRequest.setType(MessageType.MenuRequest);
+            Message menuRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.MenuRequest);
 
-            sendMessage(menuRequest.toJson());
+            sendMessage(menuRequest);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO
         }
     }
 
@@ -66,13 +60,10 @@ public class Visitor extends Client {
         }
 
         try {
-            Message orderRequest = new Message();
-            orderRequest.setSource(this.clientName);
-            orderRequest.setDestination("Administrator");
-            orderRequest.setType(MessageType.OrderRequest);
-            orderRequest.setData(order.toJson());
+            Message orderRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.OrderRequest,
+                    order.toJson());
 
-            sendMessage(orderRequest.toJson());
+            sendMessage(orderRequest);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // TODO

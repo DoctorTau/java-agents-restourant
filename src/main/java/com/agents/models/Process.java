@@ -13,6 +13,7 @@ public class Process extends Client {
     private String orderName;
     private String cookerName;
     private int time;
+
     public Process(Socket socket, String clientName, String orderName, int time) {
         super(socket, clientName);
 
@@ -28,8 +29,8 @@ public class Process extends Client {
         switch (message.getType()) {
             case ProcessRequest:
                 started(message.getData());
-            // case ProcessRespond:
-            //    ended();
+                // case ProcessRespond:
+                // ended();
             default:
                 break;
         }
@@ -45,15 +46,12 @@ public class Process extends Client {
 
     private void ended() {
         try {
-            Message processEndNotification = new Message();
-            processEndNotification.setDestination(cookerName);
-            processEndNotification.setSource(this.clientName);
-            processEndNotification.setType(MessageType.ProcessRespond);
+            Message processEndNotification = new Message(cookerName, this.clientName, MessageType.ProcessRespond);
 
-            sendMessage(processEndNotification.toJson());
+            sendMessage(processEndNotification);
 
             processEndNotification.setDestination(orderName);
-            sendMessage(processEndNotification.toJson());
+            sendMessage(processEndNotification);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // TODO

@@ -38,20 +38,15 @@ public class Kitchen extends Client {
 
     private void provideAProcess(String askerForTheWork) {
         try {
-            Message workRespond = new Message();
-            workRespond.setDestination(askerForTheWork);
-            workRespond.setSource(this.clientName);
-            workRespond.setType(MessageType.WorkRespond);
-            workRespond.setData(processQueue.peek());
+            Message workRespond = new Message(askerForTheWork, this.clientName, MessageType.WorkRespond,
+                    processQueue.peek());
+
             // TODO: provide info about process' time to the asker
 
-            Message processStart = new Message();
-            processStart.setDestination(processQueue.remove());
-            processStart.setSource(this.clientName);
-            processStart.setType(MessageType.ProcessRequest);
+            Message processStart = new Message(processQueue.remove(), this.clientName, MessageType.ProcessRequest);
 
-            sendMessage(workRespond.toJson());
-            sendMessage(processStart.toJson());
+            sendMessage(workRespond);
+            sendMessage(processStart);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // TODO
