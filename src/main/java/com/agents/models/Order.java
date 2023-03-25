@@ -9,6 +9,7 @@ import java.util.Objects;
 public class Order extends Client {
     private int countOfProcessesInWork;
     private String visitorName;
+    private Menu menu;
 
     public Order(Socket socket, String clientName, String visitorName) {
         super(socket, clientName);
@@ -24,6 +25,7 @@ public class Order extends Client {
         switch (message.getType()) {// TODO
             case OrderRequest:
                 sendOrderToTheKitchen(message);
+                sendOrderToStorage(message);
             case ProcessRespond:
                 processIsDone();
             default:
@@ -33,10 +35,11 @@ public class Order extends Client {
 
     private void sendOrderToTheKitchen(Message message) {
         try {
-            ArrayList<Dish> order = Menu.fromJson(message.getData()).getDishes();
-            countOfProcessesInWork = order.size();
+            menu = Menu.fromJson(message.getData());
+            ArrayList<Dish> dishes = menu.getDishes();
+            countOfProcessesInWork = dishes.size();
 
-            for (Dish dish : order) {
+            for (Dish dish : dishes) {
                 String processName = dish.getName() + "For" + visitorName;
                 Process process = new Process(socket, processName, this.clientName, dish.getTime());
                 new Thread(process);
@@ -47,6 +50,17 @@ public class Order extends Client {
                 sendMessage(processAdd);
             }
 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void sendOrderToStorage(Message message) {
+        try {
+            Message orderNotification = new Message(AgentNames.STORAGE, this.clientName, MessageType.OrderRequest,
+                    message.getData());
+
+            sendMessage(orderNotification);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

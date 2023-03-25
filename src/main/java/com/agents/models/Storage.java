@@ -7,16 +7,17 @@ import com.agents.Menu;
 import com.agents.Message;
 import com.agents.MessageType;
 import com.agents.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class Storage extends Client {
     ArrayList<Product> products;
-    private Menu menu = new Menu();
+    private Menu full_menu = new Menu();
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setFull_menu(Menu menu) {
+        this.full_menu = menu;
     }
 
     public Storage(Socket socket, String clientName) {
@@ -35,6 +36,9 @@ public class Storage extends Client {
                             visitorMenu.toJson());
                     sendMessage(menuMessage);
                     break;
+                case OrderRequest:
+                    reserveProductsForMenu(message);
+                    break;
                 default:
                     break;
             }
@@ -44,17 +48,43 @@ public class Storage extends Client {
     }
 
     private void fillMenu(Menu currentMenu) {
-        for (Dish dish : menu.getDishes()) {
+        for (Dish dish : full_menu.getDishes()) {
             if (dish.isPossible(products)) {
                 currentMenu.addDish(dish);
             }
         }
     }
 
-    private void provideCurrentMenu(Message message) {
-        // TODO: gets a menu from the message, checks if the dish creation is possible,
-        // sends a list of possible dishes back to the message sender
+    /**
+     * @param message - message with the order
+     *                Reserves products for the order.
+     */
+    private void reserveProductsForMenu(Message message) {
+        try {
+            Menu menu = Menu.fromJson(message.getData());
+            ArrayList<Dish> dishes = menu.getDishes();
+            for (Dish dish : dishes) {
+                for (Product product : dish.getProducts()) {
+                    makeReservationForProduct(product);
+                }
+            }
+        } catch (JsonProcessingException e) {
+            System.out.println("Error while parsing json");
+            e.printStackTrace();
+        }
+    }
 
+    /**
+     * @param product - product to be reserved
+     *                Reserves a product in the storage.
+     */
+    private void makeReservationForProduct(Product product) {
+        for (Product storageProduct : products) {
+            if (product.getId().equals(storageProduct.getId())
+                    && product.getStatus() == Product.ProductStatus.FREE) {
+                product.setStatus(Product.ProductStatus.RESERVED);
+            }
+        }
     }
 
     private void removeAProduct(Message message) {
