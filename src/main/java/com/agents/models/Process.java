@@ -1,10 +1,12 @@
 package com.agents.models;
 
 import com.agents.Client;
+import com.agents.Dish;
 import com.agents.Message;
 import com.agents.MessageType;
 
 import java.net.Socket;
+import java.util.Date;
 import java.util.Objects;
 
 import static java.lang.Thread.sleep;
@@ -12,13 +14,13 @@ import static java.lang.Thread.sleep;
 public class Process extends Client {
     private String orderName;
     private String cookerName;
-    private int time;
+    private Dish dish;
 
-    public Process(Socket socket, String clientName, String orderName, int time) {
+    public Process(Socket socket, String clientName, String orderName, Dish dish) {
         super(socket, clientName);
 
         this.orderName = orderName;
-        this.time = time;
+        this.dish = dish;
     }
 
     @Override
@@ -27,20 +29,34 @@ public class Process extends Client {
             return;
         }
         switch (message.getType()) {
+            case DishRequestRespond:
+                nameDishToCooker(message.getSource());
+                break;
             case ProcessRequest:
-                started(message.getData());
+                started(message.getSource());
                 // case ProcessRespond:
                 // ended();
+                break;
             default:
                 break;
         }
     }
 
-    private void started(String cookerName) {
-        // TODO: write smth in the log
+    private void nameDishToCooker(String cookerName) {
         this.cookerName = cookerName;
-        // sleep(time); // TODO
+        try {
+            Message dishRespond = new Message(cookerName, this.clientName, MessageType.DishRequestRespond, dish.toJson());
 
+            sendMessage(dishRespond);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            // TODO
+        }
+    }
+
+    private void started(String cookerName) {
+        this.cookerName = cookerName;
+        // TODO: sleep(time);
         ended();
     }
 

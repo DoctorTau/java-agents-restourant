@@ -25,7 +25,7 @@ public class Kitchen extends Client {
         switch (message.getType()) {
             case ProcessRequest:
                 getAProcess(message.getData());
-            case WorkRequest:
+            case WorkRequestRespond:
                 provideAProcess(message.getSource());
             default:
                 break;
@@ -38,15 +38,16 @@ public class Kitchen extends Client {
 
     private void provideAProcess(String askerForTheWork) {
         try {
-            Message workRespond = new Message(askerForTheWork, this.clientName, MessageType.WorkRespond,
+            Message workRespond = new Message(askerForTheWork, this.clientName, MessageType.WorkRequestRespond,
                     processQueue.peek());
 
             // TODO: provide info about process' time to the asker
 
-            Message processStart = new Message(processQueue.remove(), this.clientName, MessageType.ProcessRequest);
+            Message processLink = new Message(processQueue.remove(), this.clientName, MessageType.ProcessRequest,
+                    askerForTheWork);
 
             sendMessage(workRespond);
-            sendMessage(processStart);
+            sendMessage(processLink);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // TODO

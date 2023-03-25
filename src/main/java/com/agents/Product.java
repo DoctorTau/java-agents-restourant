@@ -1,9 +1,13 @@
 package com.agents;
 
 public class Product {
-    String id;
+    private final String name;
 
-    public Product(String id) {
-        this.id = id;
+    public Product(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

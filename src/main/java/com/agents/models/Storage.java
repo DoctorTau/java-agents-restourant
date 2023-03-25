@@ -31,7 +31,7 @@ public class Storage extends Client {
                     Menu currentMenu = new Menu();
                     fillMenu(currentMenu);
                     VisitorMenu visitorMenu = new VisitorMenu(message.getData(), currentMenu);
-                    Message menuMessage = new Message(AgentNames.ADMIN, AgentNames.STORAGE, MessageType.MenuResponse,
+                    Message menuMessage = new Message(AgentNames.ADMIN, AgentNames.STORAGE, MessageType.MenuRespond,
                             visitorMenu.toJson());
                     sendMessage(menuMessage);
                     break;
