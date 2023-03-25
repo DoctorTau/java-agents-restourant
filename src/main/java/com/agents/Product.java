@@ -1,4 +1,4 @@
-package com.agents.models;
+package com.agents;
 
 import java.net.Socket;
 

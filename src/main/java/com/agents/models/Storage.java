@@ -2,6 +2,7 @@ package com.agents.models;
 
 import com.agents.Client;
 import com.agents.Message;
+import com.agents.Product;
 
 import java.net.Socket;
 import java.util.ArrayList;
