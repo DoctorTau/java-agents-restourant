@@ -23,6 +23,13 @@ public class Message {
         this.data = "";
     }
 
+    public Message(String destination, String source, MessageType type, String data) {
+        this.destination = destination;
+        this.source = source;
+        this.data = data;
+        this.type = type;
+    }
+
     public Message(String destination, String source, String data) {
         this.destination = destination;
         this.source = source;

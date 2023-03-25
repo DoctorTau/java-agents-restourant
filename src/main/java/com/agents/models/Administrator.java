@@ -2,6 +2,8 @@ package com.agents.models;
 
 import com.agents.Client;
 import com.agents.Message;
+import com.agents.MessageType;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.net.Socket;
 
@@ -13,9 +15,26 @@ public class Administrator extends Client {
 
     @Override
     protected void handleMessage(Message message) {
-        switch (message.getType()) {// TODO
-            default:
-                break;
+        try {
+            switch (message.getType()) {// TODO
+                case MenuRequest:
+                    Message menuRequest = new Message("storage", "admin", MessageType.MenuRequest, message.getSource());
+                    sendMessage(menuRequest);
+                    break;
+                case MenuResponse:
+                    VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
+                    Message menuResponse = new Message(visitorMenu.getVisitorname(), "admin", MessageType.MenuResponse,
+                            visitorMenu.getMenu().toJson());
+                    sendMessage(menuResponse);
+                    break;
+                default:
+                    break;
+            }
+        } catch (JsonProcessingException je) {
+            System.out.println("Error while parsing json");
+            je.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

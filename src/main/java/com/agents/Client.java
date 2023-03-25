@@ -46,6 +46,19 @@ public class Client implements Runnable {
         }
     }
 
+    public void sendMessage(Message message) {
+        this.messageToSend = message;
+        try {
+            synchronized (messageToSendLock) {
+                messageToSendLock.notify();
+                messageToSendLock.wait();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Deprecated
     public void sendMessage(String message) {
         try {
@@ -152,6 +165,7 @@ public class Client implements Runnable {
         }
         scanner.close();
     }
+
     @Override
     public void run() {
         main(new String[0]);
