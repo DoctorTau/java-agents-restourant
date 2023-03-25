@@ -19,16 +19,10 @@ public class Administrator extends Client {
         try {
             switch (message.getType()) {// TODO
                 case MenuRequest:
-                    Message menuRequest = new Message(AgentNames.STORAGE, AgentNames.ADMIN, MessageType.MenuRequest,
-                            message.getSource());
-                    sendMessage(menuRequest);
+                    requestMenuFromStorage(message);
                     break;
                 case MenuResponse:
-                    VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
-                    Message menuResponse = new Message(visitorMenu.getVisitorname(), AgentNames.ADMIN,
-                            MessageType.MenuResponse,
-                            visitorMenu.getMenu().toJson());
-                    sendMessage(menuResponse);
+                    provideMenuToTheClient(message);
                     break;
                 default:
                     break;
@@ -41,8 +35,18 @@ public class Administrator extends Client {
         }
     }
 
-    private void provideMenuToTheClient(Message message) {
-        // TODO: asks Storage for the current menu and sends it to the message sender
+    private void requestMenuFromStorage(Message message) {
+        Message menuRequest = new Message(AgentNames.STORAGE, AgentNames.ADMIN, MessageType.MenuRequest,
+                message.getSource());
+        sendMessage(menuRequest);
+    }
+
+    private void provideMenuToTheClient(Message message) throws JsonProcessingException {
+        VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
+        Message menuResponse = new Message(visitorMenu.getVisitorname(), AgentNames.ADMIN,
+                MessageType.MenuResponse,
+                visitorMenu.getMenu().toJson());
+        sendMessage(menuResponse);
     }
 
     private void createOrder(Message message) {
