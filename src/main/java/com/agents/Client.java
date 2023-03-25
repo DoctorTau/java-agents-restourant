@@ -31,6 +31,7 @@ public class Client implements Runnable {
 
     public void sendMessage(String destination, MessageType messageType, String data) {
         this.messageToSend.setDestination(destination);
+        this.messageToSend.setSource(this.clientName);
         this.messageToSend.setType(messageType);
         this.messageToSend.setData(data);
 
