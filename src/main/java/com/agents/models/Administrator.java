@@ -1,5 +1,6 @@
 package com.agents.models;
 
+import com.agents.AgentNames;
 import com.agents.Client;
 import com.agents.Message;
 import com.agents.MessageType;
@@ -18,12 +19,14 @@ public class Administrator extends Client {
         try {
             switch (message.getType()) {// TODO
                 case MenuRequest:
-                    Message menuRequest = new Message("storage", "admin", MessageType.MenuRequest, message.getSource());
+                    Message menuRequest = new Message(AgentNames.STORAGE, AgentNames.ADMIN, MessageType.MenuRequest,
+                            message.getSource());
                     sendMessage(menuRequest);
                     break;
                 case MenuResponse:
                     VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
-                    Message menuResponse = new Message(visitorMenu.getVisitorname(), "admin", MessageType.MenuResponse,
+                    Message menuResponse = new Message(visitorMenu.getVisitorname(), AgentNames.ADMIN,
+                            MessageType.MenuResponse,
                             visitorMenu.getMenu().toJson());
                     sendMessage(menuResponse);
                     break;

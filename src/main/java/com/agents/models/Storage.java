@@ -1,5 +1,6 @@
 package com.agents.models;
 
+import com.agents.AgentNames;
 import com.agents.Client;
 import com.agents.Dish;
 import com.agents.Menu;
@@ -30,7 +31,7 @@ public class Storage extends Client {
                     Menu currentMenu = new Menu();
                     fillMenu(currentMenu);
                     VisitorMenu visitorMenu = new VisitorMenu(message.getData(), currentMenu);
-                    Message menuMessage = new Message("admin", "storage", MessageType.MenuResponse,
+                    Message menuMessage = new Message(AgentNames.ADMIN, AgentNames.STORAGE, MessageType.MenuResponse,
                             visitorMenu.toJson());
                     sendMessage(menuMessage);
                     break;

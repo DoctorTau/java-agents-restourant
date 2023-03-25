@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Visitor extends Client {
-    private String adminName = "Administrator";
+    private String adminName = AgentNames.ADMIN;
 
     public Visitor(Socket socket, String clientName) {
         super(socket, clientName);
@@ -56,7 +56,7 @@ public class Visitor extends Client {
         int countOfDishes = random.nextInt(Math.min(5, dishes.size()));
         Menu order = new Menu();
 
-        for (int i = 0 ; i < countOfDishes ; ++i) {
+        for (int i = 0; i < countOfDishes; ++i) {
             int dishIndex = random.nextInt(dishes.size());
             order.addDish(dishes.get(dishIndex));
             dishes.remove(dishIndex);
