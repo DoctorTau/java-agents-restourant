@@ -17,6 +17,10 @@ public class Client implements Runnable {
 
     private final Object messageToSendLock = new Object();
 
+    /**
+     * @param socket     - socket to connect to the server
+     * @param clientName - name of the client
+     */
     public Client(Socket socket, String clientName) {
         try {
             this.socket = socket;
@@ -29,6 +33,11 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+     * @param destination - destination agent of the message
+     * @param messageType - type of the message
+     * @param data        - data of the message
+     */
     public void sendMessage(String destination, MessageType messageType, String data) {
         this.messageToSend.setDestination(destination);
         this.messageToSend.setSource(this.clientName);
@@ -46,6 +55,9 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+     * @param message - message to send
+     */
     public void sendMessage(Message message) {
         this.messageToSend = message;
         try {
@@ -73,6 +85,9 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+     * Starting a message sending process in a new thread.
+     */
     public void sendMessage() {
         new Thread(new Runnable() {
             @Override
@@ -98,6 +113,9 @@ public class Client implements Runnable {
         }).start();
     }
 
+    /**
+     * Starting a message receiving process in a new thread.
+     */
     public void listenForMessages() {
         new Thread(new Runnable() {
             @Override
@@ -115,16 +133,31 @@ public class Client implements Runnable {
         }).start();
     }
 
+    /**
+     * @param message - message received from the server
+     * Method to handle the received message.
+     * Should be overridden in the child class.
+     */
     protected void handleMessage(Message message) {
         System.out.println(clientName + " received message from " + message.getSource() + ": " + message.getData());
     }
 
+    /**
+     * @param messageToSend - message to send
+     * @throws IOException - exception thrown when writing to the BufferedWriter fails
+     * Method to write a string to the BufferedWriter.
+     */
     private void writeStringToBufferedWriter(String messageToSend) throws IOException {
         bufferedWriter.write(messageToSend);
         bufferedWriter.newLine();
         bufferedWriter.flush();
     }
 
+    /**
+     * @param socket       - socket to close
+     * @param bufferedReader - bufferedReader to close
+     * @param bufferedWriter - bufferedWriter to close
+     */
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
         try {
             if (socket != null) {

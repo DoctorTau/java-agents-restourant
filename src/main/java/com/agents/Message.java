@@ -23,6 +23,12 @@ public class Message {
         this.data = "";
     }
 
+    /**
+     * @param destination destination agent name
+     * @param source      source agent name
+     * @param type        message type
+     * @param data        message data
+     */
     public Message(String destination, String source, MessageType type, String data) {
         this.destination = destination;
         this.source = source;
@@ -30,6 +36,11 @@ public class Message {
         this.type = type;
     }
 
+    /**
+     * @param destination destination agent name
+     * @param source      source agent name
+     * @param data        message data
+     */
     public Message(String destination, String source, String data) {
         this.destination = destination;
         this.source = source;
@@ -60,6 +71,10 @@ public class Message {
         this.data = data;
     }
 
+    /**
+     * @return json string
+     * @throws JsonProcessingException if json processing fails
+     */
     public String toJson() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(this);
