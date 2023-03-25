@@ -28,9 +28,9 @@ public class Dish {
         return products;
     }
 
-    public boolean isPossible(ArrayList<Product> availovle_products) {
+    public boolean isPossible(ArrayList<Product> availoble_products) {
         for (Product product : products) {
-            if (!availovle_products.contains(product)) {
+            if (!availoble_products.contains(product)) {
                 return false;
             }
         }

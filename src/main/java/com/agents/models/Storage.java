@@ -52,10 +52,23 @@ public class Storage extends Client {
 
     private void fillMenu(Menu currentMenu) {
         for (Dish dish : full_menu.getDishes()) {
-            if (dish.isPossible(products)) {
+            if (dish.isPossible(getAvailableProducts())) {
                 currentMenu.addDish(dish);
             }
         }
+    }
+
+    /**
+     * @return list of free products.
+     */
+    private ArrayList<Product> getAvailableProducts() {
+        ArrayList<Product> available = new ArrayList<Product>();
+        for (Product product : products) {
+            if (product.getStatus() == Product.ProductStatus.FREE) {
+                available.add(product);
+            }
+        }
+        return available;
     }
 
     /**
