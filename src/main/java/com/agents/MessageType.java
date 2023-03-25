@@ -3,11 +3,12 @@ package com.agents;
 public enum MessageType {
     MenuRequest,
     MenuResponse,
-    OrderAdd,
     OrderRequest,
-    OrderGiveAway,
-    ProccesRequest,
+    OrderRespond,
+    ProcessRequest,
     ProcessRespond,
+    WorkRequest,
+    WorkRespond,
     DevicesRequest,
     ProductRequest,
     ProductResponse

@@ -5,10 +5,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class Visitor extends Client {
-    private String adminName = "Administrator";
 
     public Visitor(Socket socket, String clientName) {
         super(socket, clientName);
@@ -18,6 +18,9 @@ public class Visitor extends Client {
 
     @Override
     protected void handleMessage(Message message) {
+        if (!Objects.equals(message.getDestination(), this.clientName)) {
+            return;
+        }
         switch (message.getType()) {
             case MenuResponse:
                 try {
@@ -27,7 +30,7 @@ public class Visitor extends Client {
                     System.out.println(e.getMessage());
                 }
                 break;
-            case OrderGiveAway:
+            case OrderRespond:
                 getAnOrder();
                 break;
             default:
@@ -36,13 +39,12 @@ public class Visitor extends Client {
     }
 
     private void askForTheMenu() {
-        // TODO: asks administrator for the current menu
-        Message menuRequest = new Message();
-        menuRequest.setDestination(adminName);
-        menuRequest.setSource(this.clientName);
-        menuRequest.setType(MessageType.MenuRequest);
-
         try {
+            Message menuRequest = new Message();
+            menuRequest.setDestination("Administrator");
+            menuRequest.setSource(this.clientName);
+            menuRequest.setType(MessageType.MenuRequest);
+
             sendMessage(menuRequest.toJson());
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -65,7 +67,7 @@ public class Visitor extends Client {
         try {
             Message orderRequest = new Message();
             orderRequest.setSource(this.clientName);
-            orderRequest.setDestination(adminName);
+            orderRequest.setDestination("Administrator");
             orderRequest.setType(MessageType.OrderRequest);
             orderRequest.setData(order.toJson());
 
