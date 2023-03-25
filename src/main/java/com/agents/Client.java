@@ -12,7 +12,7 @@ public class Client implements Runnable {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private String clientName;
+    protected String clientName;
     private Message messageToSend;
 
     private final Object messageToSendLock = new Object();
