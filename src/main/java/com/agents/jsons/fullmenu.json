@@ -17,10 +17,64 @@
         }
       ],
       "instruments": [
-        "pot",
-        "spoon"
+        "Pot",
+        "Ladle"
+      ],
+      "time": 2000
+    },
+    {
+      "name": "Cheese plate",
+      "products": [
+        {
+          "id": "Parmesan",
+          "status": "FREE"
+        },
+        {
+          "id": "Cheddar",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+        "Grater"
       ],
       "time": 1000
+    },
+    {
+      "name": "Mac and cheese",
+      "products": [
+        {
+          "id": "Cheddar",
+          "status": "FREE"
+        },
+        {
+          "id": "Spaghetti",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+      ],
+      "time": 1500
+    },
+    {
+      "name": "Bolognese",
+      "products": [
+        {
+          "id": "Parmesan",
+          "status": "FREE"
+        },
+        {
+          "id": "Spaghetti",
+          "status": "FREE"
+        },
+        {
+          "id": "Tomato",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+        "Grater"
+      ],
+      "time": 1500
     }
   ]
 }
