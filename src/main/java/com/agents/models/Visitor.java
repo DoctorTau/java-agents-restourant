@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Visitor extends Client {
-
     private static final Logger logger = Logger.getLogger(Visitor.class.getName());
 
     public Visitor(Socket socket, String clientName) {

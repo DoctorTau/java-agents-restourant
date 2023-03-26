@@ -10,19 +10,20 @@ import java.util.logging.Logger;
 
 public class Storage extends Client {
     private static final Logger logger = Logger.getLogger(Storage.class.getName());
-    private ArrayList<Product> products;
-    private Menu full_menu = new Menu();
+    private final ArrayList<Product> products;
+    private final Menu fullMenu;
 
-    public void setFull_menu(Menu menu) {
-        this.full_menu = menu;
-    }
-
-    public Storage(String clientName, int port) {
+    public Storage(String clientName, int port, ArrayList<Product> products, Menu fullMenu) {
         super(clientName, port);
+        this.products = products;
+        this.fullMenu = fullMenu;
     }
 
-    public Storage(Socket socket, String clientName) {
+    public Storage(Socket socket, String clientName, ArrayList<Product> products, Menu fullMenu) {
         super(socket, clientName);
+
+        this.products = products;
+        this.fullMenu = fullMenu;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Storage extends Client {
      * @param currentMenu - menu to be filled
      */
     private void fillMenu(Menu currentMenu) {
-        for (Dish dish : full_menu.getDishes()) {
+        for (Dish dish : fullMenu.getDishes()) {
             if (dish.isPossible(getAvailableProducts())) {
                 currentMenu.addDish(dish);
             }
