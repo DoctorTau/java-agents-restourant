@@ -15,8 +15,6 @@ public class Cooker extends Client {
     private String currentProcessName;
     private int countOfNeededProductsAndInstruments;
 
-    private ArrayList<Product> products;
-
     public Cooker(Socket socket, String clientName) {
         super(socket, clientName);
 
@@ -38,15 +36,13 @@ public class Cooker extends Client {
                 askForProductsAndInstruments(message);
                 break;
             case InstrumentsRespond:
+            case ProductRespond:
                 getAProductOrAnInstrument();
                 break;
             case ProcessRespond:
                 currentProcessName = "";
                 countOfNeededProductsAndInstruments = 0;
                 askForTheWork();
-                break;
-            case ProductRespond:
-                getProduct(message);
                 break;
             default:
                 break;
@@ -74,7 +70,9 @@ public class Cooker extends Client {
             countOfNeededProductsAndInstruments = products.size() + instruments.size();
 
             for (Product product : products) {
-                askForPoduct(product);
+                Message productRequest = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
+                        product.getId());
+                sendMessage(productRequest);
             }
 
             for (String instrument : instruments) {
@@ -95,22 +93,6 @@ public class Cooker extends Client {
         if (countOfNeededProductsAndInstruments == 0) {
             startWorking();
         }
-    }
-
-    private void askForPoduct(Product product) {
-        try {
-            // Sends a request for the product to the storage. In request body is the
-            // product's id.
-            Message message = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
-                    product.getId());
-            sendMessage(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getProduct(Message message) {
-        products.add(new Product(message.getData()));
     }
 
     private void startWorking() {
