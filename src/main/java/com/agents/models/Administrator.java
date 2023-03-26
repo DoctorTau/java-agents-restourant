@@ -24,6 +24,8 @@ public class Administrator extends Client {
                 case MenuRespond:
                     provideMenuToTheClient(message);
                     break;
+                case OrderRequest:
+                    createOrder(message);
                 default:
                     break;
             }
@@ -50,8 +52,17 @@ public class Administrator extends Client {
     }
 
     private void createOrder(Message message) {
-        // Order order = new Order(); // TODO: gets needed dishes from the message
-        // new Thread(order);
+        try {
+            String orderName = message.getSource() + "Order";
+            Order order = new Order(this.socket, orderName, message.getSource());
+            new Thread(order);
+
+            Message orderRequest = new Message(orderName, this.clientName, MessageType.OrderRequest, message.getData());
+            sendMessage(orderRequest);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            // TODO
+        }
     }
 
     private void giveOrderToTheClient(Message message) {
