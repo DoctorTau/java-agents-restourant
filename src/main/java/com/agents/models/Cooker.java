@@ -19,8 +19,6 @@ public class Cooker extends Client {
     private String currentProcessName;
     private int countOfNeededProductsAndInstruments;
 
-    private ArrayList<Product> products;
-
     public Cooker(Socket socket, String clientName) {
         super(socket, clientName);
 
@@ -36,34 +34,34 @@ public class Cooker extends Client {
         }
         switch (message.getType()) {
             case WorkRespond:
-                // Get the work from the message
+                // Gets the work from the Administrator
                 getAWork(message);
                 break;
             case DishRequestRespond:
-                // Ask for products and instruments
+                // Gets the ordered dish from the Process
                 askForProductsAndInstruments(message);
                 break;
             case InstrumentsRespond:
-                // Get a product or an instrument
+            case ProductRespond:
+                // Gets the requested Instrument or Product
                 getAProductOrAnInstrument();
                 break;
             case ProcessRespond:
-                // Reset the current process name and the count of needed products and
-                // instruments
+                // Current process is finished
                 currentProcessName = "";
                 countOfNeededProductsAndInstruments = 0;
-                // Ask for the work
                 askForTheWork();
-                break;
-            case ProductRespond:
-                // Add the product to the inventory
-                addProduct(message);
                 break;
             default:
                 break;
         }
     }
 
+    /**
+     * Gets the work from the Administrator
+     *
+     * @param message message from the Administrator
+     */
     private void getAWork(Message message) {
         try {
             currentProcessName = message.getData();
@@ -72,17 +70,16 @@ public class Cooker extends Client {
 
             sendMessage(neededDishRequest);
 
-            logger.log(Level.INFO, this.clientName + ": Received work request from Kitchen and got assigned to work on "
-                    + currentProcessName);
+            logger.log(Level.INFO, this.clientName + ": Received work request from Kitchen and got assigned to work on " + currentProcessName);
         } catch (Exception e) {
             logger.log(Level.SEVERE, this.clientName + ": Error while getting work from Kitchen", e);
         }
     }
 
     /**
-     * Asks for products and instruments.
-     * 
-     * @param message Message with the dish's id.
+     * Asks the Kitchen and the Storage for needed products and instruments
+     *
+     * @param message message from the Process with the dish its contains
      */
     private void askForProductsAndInstruments(Message message) {
         try {
@@ -92,11 +89,20 @@ public class Cooker extends Client {
             countOfNeededProductsAndInstruments = products.size() + instruments.size();
 
             for (Product product : products) {
-                askForPoduct(product);
+                Message productRequest = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
+                        product.getId());
+                sendMessage(productRequest);
+
+                logger.log(Level.INFO,this.clientName + ": Sent product request to Storage for product with ID: " + product.getId());
             }
 
             for (String instrument : instruments) {
-                askForInstrument(instrument);
+                Message instrumentRequest = new Message(AgentNames.KITCHEN, this.clientName,
+                        MessageType.InstrumentsRequest, instrument);
+
+                sendMessage(instrumentRequest);
+
+                logger.log(Level.INFO,this.clientName + ": Sent instrument request to Kitchen for instrument: " + instrument);
             }
 
         } catch (Exception e) {
@@ -105,20 +111,7 @@ public class Cooker extends Client {
     }
 
     /**
-     * Asks for an instrument from the kitchen.
-     * 
-     * @param instrument The name of the instrument.
-     */
-    private void askForInstrument(String instrument) {
-        Message instrumentRequest = new Message(AgentNames.KITCHEN, this.clientName,
-                MessageType.InstrumentsRequest, instrument);
-
-        sendMessage(instrumentRequest);
-        logger.log(Level.INFO, this.clientName + ": Sent instrument request to Kitchen for instrument: " + instrument);
-    }
-
-    /**
-     * Decreases the number of needed products and instruments. If the number is 0,
+     * One of requested products is gotten
      */
     private void getAProductOrAnInstrument() {
         --countOfNeededProductsAndInstruments;
@@ -128,35 +121,7 @@ public class Cooker extends Client {
     }
 
     /**
-     * Asks for a product from the storage.
-     * 
-     * @param product The product.
-     */
-    private void askForPoduct(Product product) {
-        try {
-            // Sends a request for the product to the storage. In request body is the
-            // product's id.
-            Message message = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
-                    product.getId());
-            sendMessage(message);
-            logger.log(Level.INFO,
-                    this.clientName + ": Sent product request to Storage for product with ID: " + product.getId());
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, this.clientName + ": Error while asking for a product", e);
-        }
-    }
-
-    /**
-     * Adds a product from the storage.
-     * 
-     * @param message Message with the product's id.
-     */
-    private void addProduct(Message message) {
-        products.add(new Product(message.getData()));
-    }
-
-    /**
-     * Sends a message to the procces that the process has started.
+     * Orders Process to get started
      */
     private void startWorking() {
         try {
@@ -164,15 +129,14 @@ public class Cooker extends Client {
 
             sendMessage(processStart);
 
-            logger.log(Level.INFO, this.clientName + ": All products and instruments have arrived, starting work on "
-                    + currentProcessName);
+            logger.log(Level.INFO,this.clientName + ": All products and instruments have arrived, starting work on " + currentProcessName);
         } catch (Exception e) {
             logger.log(Level.SEVERE, this.clientName + ": Error while starting work", e);
         }
     }
 
     /**
-     * Asks for the work from the kitchen.
+     * Asks Administrator for the new work
      */
     private void askForTheWork() {
         try {
