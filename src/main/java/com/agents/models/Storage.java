@@ -34,6 +34,9 @@ public class Storage extends Client {
 
     @Override
     protected void handleMessage(Message message) {
+        if (!message.getDestination().equals(this.clientName)) {
+            return;
+        }
         try {
             switch (message.getType()) {
                 case MenuRequest:
@@ -42,7 +45,7 @@ public class Storage extends Client {
                 case OrderRequest:
                     reserveProductsForMenu(message);
                     break;
-                case ProcessRequest:
+                case ProductRequest:
                     sendProduct(message);
                     break;
                 default:
@@ -138,12 +141,11 @@ public class Storage extends Client {
     private void sendProduct(Message message) {
         String productId = message.getData();
         for (Product product : products) {
-            if (product.getId().equals(productId) && product.getStatus() == Product.ProductStatus.RESERVED) {
+            if (product.getId().equals(productId)) {
                 Message productMessage = new Message(message.getSource(), AgentNames.STORAGE,
                         MessageType.ProductRespond, product.getId());
                 sendMessage(productMessage);
                 removeProduct(product);
-                logger.log(Level.INFO, "Product with ID " + productId + " has been sent and removed from storage");
                 return;
             }
         }

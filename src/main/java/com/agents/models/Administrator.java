@@ -25,6 +25,9 @@ public class Administrator extends Client {
 
     @Override
     protected void handleMessage(Message message) {
+        if (!message.getDestination().equals(this.clientName)) {
+            return;
+        }
         try {
             switch (message.getType()) {
                 case Ping:

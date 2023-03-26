@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.ServerSocket;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import com.agents.models.Administrator;
@@ -45,9 +46,10 @@ public class App {
             createEverythingFromJson();
 
             Thread.sleep(1000);
-            startOrders();
             startCookersWorker();
             startInstrumentsWorker();
+
+            startOrders();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,9 +128,15 @@ public class App {
     }
 
     private static void startOrders() {
+        Random random = new Random();
         for (Client client : clients) {
             if (client instanceof Visitor) {
                 Visitor visitor = (Visitor) client;
+                try {
+                    Thread.sleep(random.nextInt(1000, 10000));
+                } catch (Exception e) {
+                    logger.severe(e.getMessage());
+                }
                 visitor.askForTheMenu();
             }
         }
