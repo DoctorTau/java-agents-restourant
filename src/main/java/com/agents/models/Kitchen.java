@@ -11,7 +11,7 @@ public class Kitchen extends Client {
     Queue<String> processQueue;
     Queue<String> cookerQueue;
     Map<String, Queue<String>> cookersToInstrumentsQueues;
-    ArrayList<String> instrumentsList;
+    Map<String, Queue<String>> instrumentsQueues;
 
     public Kitchen(Socket socket, String clientName) {
         super(socket, clientName);
@@ -32,10 +32,10 @@ public class Kitchen extends Client {
                 getACooker(message.getSource());
                 break;
             case InstrumentsRequest:
-                getAnInstrumentRequestFromTheCooker(message.getData(), message.getSource());
+                getAnInstrumentRequestFromTheCooker(message.getSource(), message.getData());
                 break;
             case InstrumentsRespond:
-                getAnInstrument(message.getSource());
+                getAnInstrument(message.getSource(), message.getData());
                 break;
             default:
                 break;
@@ -74,24 +74,29 @@ public class Kitchen extends Client {
         }
     }
 
-    private void getAnInstrument(String instrumentName) {
+    private void getAnInstrument(String instrumentAgentName, String instrumentName) {
         if (cookersToInstrumentsQueues.get(instrumentName).isEmpty()) {
-            instrumentsList.add(instrumentName);
+            Queue<String> instrumentAgents = instrumentsQueues.get(instrumentName);
+            instrumentAgents.add(instrumentAgentName);
+            instrumentsQueues.put(instrumentName, instrumentAgents);
         } else {
             Queue<String> cookers = cookersToInstrumentsQueues.get(instrumentName);
             String cookerName = cookers.remove();
             cookersToInstrumentsQueues.put(instrumentName, cookers);
-            provideAnInstrument(instrumentName, cookerName);
+            provideAnInstrument(instrumentAgentName, cookerName);
         }
     }
 
-    private void getAnInstrumentRequestFromTheCooker(String instrumentName, String cookerName) {
-        if (!instrumentsList.contains(instrumentName)) {
+    private void getAnInstrumentRequestFromTheCooker(String cookerName, String instrumentName) {
+        if (instrumentsQueues.get(instrumentName).isEmpty()) {
             Queue<String> cookers = cookersToInstrumentsQueues.get(instrumentName);
             cookers.add(cookerName);
             cookersToInstrumentsQueues.put(instrumentName, cookers);
         } else {
-            provideAnInstrument(instrumentName, cookerName);
+            Queue<String> instrumentAgents = instrumentsQueues.get(instrumentName);
+            String instrumentAgentName = instrumentAgents.remove();
+            instrumentsQueues.put(instrumentName, instrumentAgents);
+            provideAnInstrument(instrumentAgentName, cookerName);
         }
     }
 
@@ -113,7 +118,6 @@ public class Kitchen extends Client {
             sendMessage(instrumentRequest);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO
         }
     }
 
@@ -126,7 +130,6 @@ public class Kitchen extends Client {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            //TODO
         }
     } */
 }

@@ -7,10 +7,12 @@ import java.util.Objects;
 
 public class Instrument extends Client {
     // private boolean isFree;
-    public Instrument(Socket socket, String clientName) {
+    private String name;
+    public Instrument(Socket socket, String clientName, String name) {
         super(socket, clientName);
 
         // isFree = true;
+        this.name = name;
         askForTheWork();
     }
 
@@ -61,7 +63,7 @@ public class Instrument extends Client {
     private void askForTheWork() {
         try {
             // isFree = true;
-            Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.InstrumentsRespond);
+            Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.InstrumentsRespond, name);
 
             sendMessage(workRequest);
         } catch (Exception e) {
