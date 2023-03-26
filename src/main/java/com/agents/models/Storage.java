@@ -1,19 +1,16 @@
 package com.agents.models;
 
-import com.agents.AgentNames;
-import com.agents.Client;
-import com.agents.Dish;
-import com.agents.Menu;
-import com.agents.Message;
-import com.agents.MessageType;
-import com.agents.Product;
+import com.agents.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Storage extends Client {
-    ArrayList<Product> products;
+    private static final Logger logger = Logger.getLogger(Storage.class.getName());
+    private ArrayList<Product> products;
     private Menu full_menu = new Menu();
 
     public void setFull_menu(Menu menu) {
@@ -27,7 +24,7 @@ public class Storage extends Client {
     @Override
     protected void handleMessage(Message message) {
         try {
-            switch (message.getType()) {// TODO
+            switch (message.getType()) {
                 case MenuRequest:
                     Menu currentMenu = new Menu();
                     fillMenu(currentMenu);
@@ -35,6 +32,7 @@ public class Storage extends Client {
                     Message menuMessage = new Message(AgentNames.ADMIN, AgentNames.STORAGE, MessageType.MenuRespond,
                             visitorMenu.toJson());
                     sendMessage(menuMessage);
+                    logger.log(Level.INFO, "Sent menu to the admin.");
                     break;
                 case OrderRequest:
                     reserveProductsForMenu(message);
@@ -46,7 +44,7 @@ public class Storage extends Client {
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while handling message", e);
         }
     }
 
@@ -84,9 +82,9 @@ public class Storage extends Client {
                     makeReservationForProduct(product);
                 }
             }
+            logger.log(Level.INFO, "Reserved products for the order");
         } catch (JsonProcessingException e) {
-            System.out.println("Error while parsing json");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while parsing json", e);
         }
     }
 
@@ -99,8 +97,11 @@ public class Storage extends Client {
             if (product.getId().equals(storageProduct.getId())
                     && product.getStatus() == Product.ProductStatus.FREE) {
                 product.setStatus(Product.ProductStatus.RESERVED);
+                logger.log(Level.INFO, "Reserved product with id " + product.getId());
+                return;
             }
         }
+        logger.log(Level.WARNING, "Unable to reserve product with id " + product.getId());
     }
 
     private void sendProduct(Message message) {
@@ -108,17 +109,19 @@ public class Storage extends Client {
         for (Product product : products) {
             if (product.getId().equals(productId) && product.getStatus() == Product.ProductStatus.RESERVED) {
                 Message productMessage = new Message(message.getSource(), AgentNames.STORAGE,
-                        MessageType.ProductRespond,
-                        product.getId());
+                        MessageType.ProductRespond, product.getId());
                 sendMessage(productMessage);
                 removeProduct(product);
+                logger.log(Level.INFO, "Product with ID " + productId + " has been sent and removed from storage");
+                return;
             }
         }
 
-        // TODO: send message to logger that there is no such product
+        logger.log(Level.WARNING, "Product with ID " + productId + " not found or not reserved");
     }
 
     private void removeProduct(Product product) {
         products.remove(product);
+        logger.log(Level.INFO, "Product with ID " + product.getId() + " has been removed from storage");
     }
 }
