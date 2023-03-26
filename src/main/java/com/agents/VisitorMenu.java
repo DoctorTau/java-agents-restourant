@@ -1,6 +1,5 @@
-package com.agents.models;
+package com.agents;
 
-import com.agents.Menu;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
