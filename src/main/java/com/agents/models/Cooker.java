@@ -24,14 +24,14 @@ public class Cooker extends Client {
             return;
         }
         switch (message.getType()) {
-            case WorkRequestRespond:
+            case WorkRespond:
                 getAWork(message);
                 break;
             case DishRequestRespond:
                 askForProductsAndInstruments(message);
                 break;
             case ProductRespond:
-            case InstrumentsRequestRespond:
+            case InstrumentsRespond:
                 getAProductOrAnInstrument();
                 break;
             case ProcessRespond:
@@ -70,7 +70,7 @@ public class Cooker extends Client {
             }
 
             for (String instrument : instruments) {
-                Message instrumentRequest = new Message(AgentNames.STORAGE, this.clientName, MessageType.InstrumentsRequestRespond, instrument);
+                Message instrumentRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.InstrumentsRequest, instrument);
 
                 sendMessage(instrumentRequest);
             }
@@ -101,7 +101,7 @@ public class Cooker extends Client {
 
     private void askForTheWork() {
         try {
-            Message workRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.WorkRequestRespond);
+            Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.WorkRequest);
 
             sendMessage(workRequest);
         } catch (Exception e) {

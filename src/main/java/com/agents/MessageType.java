@@ -8,9 +8,11 @@ public enum MessageType {
     OrderRespond,
     ProcessRequest,
     ProcessRespond,
-    WorkRequestRespond,
+    WorkRequest,
+    WorkRespond,
     DishRequestRespond,
-    InstrumentsRequestRespond,
+    InstrumentsRequest,
+    InstrumentsRespond,
     ProductRequest,
     ProductRespond
 }
