@@ -9,14 +9,20 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client implements Runnable {
-    protected Socket socket;
+    protected int socketPort;
+    protected Socket socket = null;
     protected String clientName;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private Message messageToSend;
+    private Message messageToSend = new Message();
 
     private final Object messageToSendLock = new Object();
     protected Thread thread = new Thread(this);
+
+    public Client(String clientName, int port) {
+        this.clientName = clientName;
+        this.socketPort = port;
+    }
 
     /**
      * @param socket     - socket to connect to the server
@@ -196,7 +202,6 @@ public class Client implements Runnable {
             String clientName;
             if (args.length == 0) {
                 System.out.println("Enter your name: ");
-                System.out.println("Enter your name: ");
                 clientName = scanner.nextLine();
             } else {
                 clientName = args[0];
@@ -219,7 +224,21 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        this.listenForMessages();
-        this.sendMessage();
+        if (this.socket == null) {
+            try {
+                this.socket = new Socket("localhost", socketPort);
+                this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                this.messageToSend.setSource(clientName);
+
+                this.listenForMessages();
+                this.sendMessage();
+
+                Message ping = new Message("", clientName, MessageType.Ping, "");
+                this.sendMessage(ping);
+            } catch (IOException e) {
+                closeEverything(socket, bufferedReader, bufferedWriter);
+            }
+        }
     }
 }

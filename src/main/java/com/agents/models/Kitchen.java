@@ -18,6 +18,15 @@ public class Kitchen extends Client {
     Map<String, Queue<String>> cookersToInstrumentsQueues;
     Map<String, Queue<String>> instrumentsQueues;
 
+    public Kitchen(String clientName, int port) {
+        super(clientName, port);
+
+        cookersToInstrumentsQueues = new HashMap<>();
+        processQueue = new PriorityQueue<>();
+        cookerQueue = new PriorityQueue<>();
+        instrumentsQueues = new HashMap<>();
+    }
+
     public Kitchen(Socket socket, String clientName) {
         super(socket, clientName);
 
@@ -33,6 +42,9 @@ public class Kitchen extends Client {
             return;
         }
         switch (message.getType()) {
+            case Ping:
+                logger.log(Level.INFO, "Ping received");
+                break;
             case ProcessRequest:
                 // Ask the cooker to get a process
                 getAProcess(message.getData());

@@ -15,6 +15,10 @@ public class Administrator extends Client {
 
     private static final Logger logger = Logger.getLogger(Administrator.class.getName());
 
+    public Administrator(String clientName, int port) {
+        super(clientName, port);
+    }
+
     public Administrator(Socket socket, String clientName) {
         super(socket, clientName);
     }
@@ -23,6 +27,9 @@ public class Administrator extends Client {
     protected void handleMessage(Message message) {
         try {
             switch (message.getType()) {
+                case Ping:
+                    logger.log(Level.INFO, "Ping received");
+                    break;
                 case MenuRequest:
                     requestMenuFromStorage(message);
                     break;
