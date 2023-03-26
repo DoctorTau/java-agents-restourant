@@ -1,13 +1,13 @@
 package com.agents;
 
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.agents.models.Administrator;
 import com.agents.models.Kitchen;
+import com.agents.models.Storage;
 
 public class App {
     private static ArrayList<Client> clients = new ArrayList<>();
@@ -27,24 +27,33 @@ public class App {
             Kitchen kitchen = new Kitchen(AgentNames.KITCHEN, 5001);
             startClient(kitchen);
 
-            Message message = new Message(AgentNames.KITCHEN, AgentNames.ADMIN,
-                    MessageType.Ping, "Ping!");
-            synchronized (administrator) {
-                administrator.sendMessage(message);
-            }
-            System.out.println("Message sent");
+            Storage storage = new Storage(AgentNames.STORAGE, 5001);
+            startClient(storage);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // Do the method that gets Client or any derived classes from Client. Add them
-    // to ArrayList and do .startClient() on them.
+    /**
+     * Starts a client and adds it to the list of clients.
+     * 
+     * @param client Client to start
+     */
     private static void startClient(Client client) {
         clients.add(client);
         client.startClient();
+
         logger.info(MessageFormat.format("Client {0} started", client.clientName));
+    }
+
+    /**
+     * Stops all clients.
+     */
+    public static void stopClients() {
+        for (Client client : clients) {
+            client.finishClient();
+        }
     }
 
 }

@@ -17,6 +17,10 @@ public class Storage extends Client {
         this.full_menu = menu;
     }
 
+    public Storage(String clientName, int port) {
+        super(clientName, port);
+    }
+
     public Storage(Socket socket, String clientName) {
         super(socket, clientName);
     }
