@@ -16,6 +16,7 @@ public class Client implements Runnable {
     private Message messageToSend;
 
     private final Object messageToSendLock = new Object();
+    protected Thread thread = new Thread(this);
 
     /**
      * @param socket     - socket to connect to the server
@@ -31,6 +32,20 @@ public class Client implements Runnable {
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
+    }
+
+    /**
+     * Starts the thread of the client.
+     */
+    public void startClient() {
+        thread.start();
+    }
+
+    /**
+     * Stops the thread of the client.
+     */
+    public void finishClient() {
+        thread.interrupt();
     }
 
     /**
@@ -135,8 +150,8 @@ public class Client implements Runnable {
 
     /**
      * @param message - message received from the server
-     * Method to handle the received message.
-     * Should be overridden in the child class.
+     *                Method to handle the received message.
+     *                Should be overridden in the child class.
      */
     protected void handleMessage(Message message) {
         System.out.println(clientName + " received message from " + message.getSource() + ": " + message.getData());
@@ -144,8 +159,9 @@ public class Client implements Runnable {
 
     /**
      * @param messageToSend - message to send
-     * @throws IOException - exception thrown when writing to the BufferedWriter fails
-     * Method to write a string to the BufferedWriter.
+     * @throws IOException - exception thrown when writing to the BufferedWriter
+     *                     fails
+     *                     Method to write a string to the BufferedWriter.
      */
     private void writeStringToBufferedWriter(String messageToSend) throws IOException {
         bufferedWriter.write(messageToSend);
@@ -154,7 +170,7 @@ public class Client implements Runnable {
     }
 
     /**
-     * @param socket       - socket to close
+     * @param socket         - socket to close
      * @param bufferedReader - bufferedReader to close
      * @param bufferedWriter - bufferedWriter to close
      */
@@ -175,15 +191,17 @@ public class Client implements Runnable {
     }
 
     public static void main(String[] args) {
-        final Scanner scanner = new Scanner(System.in);
-        String clientName;
-        if (args.length == 1) {
-            clientName = args[0];
-        } else {
-            clientName = scanner.nextLine();
-        }
+        Scanner scanner = new Scanner(System.in);
         try {
-            System.out.println("Enter your name: ");
+            String clientName;
+            if (args.length == 0) {
+                System.out.println("Enter your name: ");
+                System.out.println("Enter your name: ");
+                clientName = scanner.nextLine();
+            } else {
+                clientName = args[0];
+            }
+
             Socket socket = new Socket("localhost", 5001);
             final Client client = new Client(socket, clientName);
             client.listenForMessages();
@@ -201,6 +219,7 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        main(new String[0]);
+        this.listenForMessages();
+        this.sendMessage();
     }
 }

@@ -51,17 +51,20 @@ public class Administrator extends Client {
         sendMessage(menuResponse);
     }
 
+    /**
+     * @param message - message with order data
+     *                Creates the order agent from visitor's message.
+     */
     private void createOrder(Message message) {
         try {
             String orderName = message.getSource() + "Order";
             Order order = new Order(this.socket, orderName, message.getSource());
-            new Thread(order);
+            order.startClient();
 
             Message orderRequest = new Message(orderName, this.clientName, MessageType.OrderRequest, message.getData());
             sendMessage(orderRequest);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO
         }
     }
 
