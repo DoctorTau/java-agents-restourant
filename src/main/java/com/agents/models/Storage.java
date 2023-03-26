@@ -108,8 +108,9 @@ public class Storage extends Client {
         for (Product product : products) {
             if (product.getId().equals(productId) && product.getStatus() == Product.ProductStatus.RESERVED) {
                 Message productMessage = new Message(message.getSource(), AgentNames.STORAGE,
-                        MessageType.ProductResponse,
+                        MessageType.ProductRespond,
                         product.getId());
+                sendMessage(productMessage);
                 removeProduct(product);
             }
         }

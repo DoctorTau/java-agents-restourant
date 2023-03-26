@@ -2,6 +2,7 @@ package com.agents.models;
 
 import com.agents.AgentNames;
 import com.agents.Client;
+import com.agents.Dish;
 import com.agents.Message;
 import com.agents.MessageType;
 import com.agents.Product;
@@ -73,10 +74,7 @@ public class Cooker extends Client {
             countOfNeededProductsAndInstruments = products.size() + instruments.size();
 
             for (Product product : products) {
-                Message productRequest = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
-                        product.getName());
-
-                sendMessage(productRequest);
+                askForPoduct(product);
             }
 
             for (String instrument : instruments) {

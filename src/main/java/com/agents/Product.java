@@ -12,6 +12,10 @@ public class Product {
     private String id;
     private ProductStatus status = ProductStatus.FREE;
 
+    public Product(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
