@@ -43,7 +43,7 @@ public class Kitchen extends Client {
         }
         switch (message.getType()) {
             case Ping:
-                logger.log(Level.INFO, "Ping received");
+                logger.log(Level.INFO, "Ping from " + message.getSource() + " received");
                 break;
             case ProcessRequest:
                 // Ask the cooker to get a process
