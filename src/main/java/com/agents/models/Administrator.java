@@ -26,6 +26,9 @@ public class Administrator extends Client {
                     break;
                 case OrderRequest:
                     createOrder(message);
+                case OrderRespond:
+                    giveOrderToTheClient(message);
+                    break;
                 default:
                     break;
             }
@@ -43,6 +46,12 @@ public class Administrator extends Client {
         sendMessage(menuRequest);
     }
 
+    /**
+     * Provides menu to the client.
+     * 
+     * @param message
+     * @throws JsonProcessingException
+     */
     private void provideMenuToTheClient(Message message) throws JsonProcessingException {
         VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
         Message menuResponse = new Message(visitorMenu.getVisitorname(), AgentNames.ADMIN,
@@ -69,6 +78,8 @@ public class Administrator extends Client {
     }
 
     private void giveOrderToTheClient(Message message) {
-        // TODO: sends notification that order is ready to the client
+        Message orderResponse = new Message(message.getData(), AgentNames.ADMIN, MessageType.OrderRespond,
+                message.getSource());
+        sendMessage(orderResponse);
     }
 }

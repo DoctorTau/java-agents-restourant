@@ -71,6 +71,6 @@ public class Visitor extends Client {
     }
 
     private void getAnOrder() {
-        // TODO: gets and order from the administrator and write smth in log
+        // TODO log order ready.
     }
 }
