@@ -22,8 +22,8 @@ public class Kitchen extends Client {
         super(socket, clientName);
 
         cookersToInstrumentsQueues = new HashMap<>();
-        processQueue = new LinkedList<>();
-        cookerQueue = new LinkedList<>();
+        processQueue = new PriorityQueue<>();
+        cookerQueue = new PriorityQueue<>();
         instrumentsQueues = new HashMap<>();
     }
 
@@ -112,6 +112,7 @@ public class Kitchen extends Client {
      * @param instrumentName the name of the instrument
      */
     private void getAnInstrument(String instrumentAgentName, String instrumentName) {
+        checkInstrument(instrumentName);
         if (cookersToInstrumentsQueues.get(instrumentName).isEmpty()) {
             Queue<String> instrumentAgents = instrumentsQueues.get(instrumentName);
             instrumentAgents.add(instrumentAgentName);
@@ -134,6 +135,7 @@ public class Kitchen extends Client {
      * @param cookerName     the name of the cooker
      */
     private void getAnInstrumentRequestFromTheCooker(String cookerName, String instrumentName) {
+        checkInstrument(instrumentName);
         if (instrumentsQueues.get(instrumentName).isEmpty()) {
             Queue<String> cookers = cookersToInstrumentsQueues.get(instrumentName);
             cookers.add(cookerName);
@@ -146,6 +148,22 @@ public class Kitchen extends Client {
             String instrumentAgentName = instrumentAgents.remove();
             instrumentsQueues.put(instrumentName, instrumentAgents);
             provideAnInstrument(instrumentAgentName, cookerName);
+        }
+    }
+
+    /**
+     * Checks if the instrument was added before, and if so fixes it
+     *
+     * @param instrumentName the name of the instrument
+     */
+    private void checkInstrument(String instrumentName) {
+        if (!instrumentsQueues.containsKey(instrumentName)) {
+            Queue<String> queue = new PriorityQueue<>();
+            instrumentsQueues.put(instrumentName, queue);
+        }
+        if (!cookersToInstrumentsQueues.containsKey(instrumentName)) {
+            Queue<String> queue = new PriorityQueue<>();
+            cookersToInstrumentsQueues.put(instrumentName, queue);
         }
     }
 
