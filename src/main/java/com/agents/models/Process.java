@@ -80,9 +80,11 @@ public class Process extends Client {
         try {
             long time = dish.getTime();
             sleep(time);
-            logger.log(Level.INFO, this.clientName + ": Finished cooking dish " + dish.getName() + " for order " + orderName);
+            logger.log(Level.INFO,
+                    this.clientName + ": Finished cooking dish " + dish.getName() + " for order " + orderName);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, this.clientName + ": Failed to cook dish " + dish.getName() + " for order " + orderName, e);
+            logger.log(Level.SEVERE,
+                    this.clientName + ": Failed to cook dish " + dish.getName() + " for order " + orderName, e);
         }
         ended();
     }

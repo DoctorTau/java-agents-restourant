@@ -35,7 +35,6 @@ public class Visitor extends Client {
                 break;
             case OrderRespond:
                 // Get an order for the customer
-                logger.log(Level.INFO, this.clientName + ": Order response received");
                 getAnOrder();
                 break;
             default:
@@ -100,6 +99,6 @@ public class Visitor extends Client {
     }
 
     private void getAnOrder() {
-        // TODO log order ready.
+        logger.log(Level.INFO, this.clientName + ": Order response received");
     }
 }

@@ -142,7 +142,7 @@ public class Cooker extends Client {
             logger.log(Level.INFO,
                     this.clientName + ": Sent product request to Storage for product with ID: " + product.getId());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, this.clientName + ": Error while asking for a product", e);
         }
     }
 

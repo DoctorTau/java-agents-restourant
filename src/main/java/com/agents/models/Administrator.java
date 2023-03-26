@@ -22,7 +22,7 @@ public class Administrator extends Client {
     @Override
     protected void handleMessage(Message message) {
         try {
-            switch (message.getType()) {// TODO
+            switch (message.getType()) {
                 case MenuRequest:
                     requestMenuFromStorage(message);
                     break;
@@ -38,7 +38,7 @@ public class Administrator extends Client {
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while handling message", e);
         }
     }
 
@@ -82,6 +82,8 @@ public class Administrator extends Client {
             sendMessage(orderRequest);
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            logger.log(Level.SEVERE, "An error occurred while creating order for the visitor " + message.getSource(),
+                    e);
         }
     }
 

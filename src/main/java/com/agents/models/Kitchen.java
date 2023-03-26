@@ -162,35 +162,9 @@ public class Kitchen extends Client {
             logger.log(Level.INFO, "Provided an instrument " + instrumentName + " to " + cookerName);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO
+            // log the error
+            logger.log(Level.SEVERE, "Exception occurred while providing an instrument {0} to cooker {1}",
+                    new Object[] { instrumentName, cookerName });
         }
     }
-
-    /*
-     * private void provideAnInstrument(Message message) {
-     * try {
-     * CookersToInstrumentsQueues.get(message.getData()).add(message.getSource());
-     * 
-     * Message instrumentRequest = new Message(message.getData(), this.clientName,
-     * MessageType.InstrumentsRequest);
-     * sendMessage(instrumentRequest);
-     * } catch (Exception e) {
-     * System.out.println(e.getMessage());
-     * }
-     * }
-     * 
-     * private void getRespondFromAnInstrument(Message message) {
-     * /* try {
-     * if (Objects.equals(message.getData(), "true")) {
-     * Message instrumentGiveAway = new
-     * Message(CookersToInstrumentsQueues.get(message.getSource()).remove(),
-     * this.clientName, MessageType.InstrumentsRespond);
-     * 
-     * sendMessage(instrumentGiveAway);
-     * }
-     * } catch (Exception e) {
-     * System.out.println(e.getMessage());
-     * }
-     * }
-     */
 }
