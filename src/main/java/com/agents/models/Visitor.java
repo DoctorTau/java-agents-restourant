@@ -12,6 +12,13 @@ import java.util.logging.Logger;
 public class Visitor extends Client {
     private static final Logger logger = Logger.getLogger(Visitor.class.getName());
 
+    public Visitor(String clientName, int port) {
+        super(clientName, port);
+
+        logger.log(Level.INFO, "Visitor object created with client name " + clientName);
+        askForTheMenu();
+    }
+
     public Visitor(Socket socket, String clientName) {
         super(socket, clientName);
 

@@ -12,6 +12,12 @@ public class Instrument extends Client {
 
     private final String name;
 
+    public Instrument(String clientName, int port, String name) {
+        super(clientName, port);
+        this.name = name;
+        askForTheWork();
+    }
+
     public Instrument(Socket socket, String clientName, String name) {
         super(socket, clientName);
         this.name = name;
@@ -34,7 +40,8 @@ public class Instrument extends Client {
 
     private void askForTheWork() {
         try {
-            Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.InstrumentsRespond, name);
+            Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.InstrumentsRespond,
+                    name);
             sendMessage(workRequest);
             logger.log(Level.INFO, this.clientName + ": Sent work request from " + " for " + name);
         } catch (Exception e) {

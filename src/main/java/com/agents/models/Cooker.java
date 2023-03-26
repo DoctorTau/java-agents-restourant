@@ -19,6 +19,14 @@ public class Cooker extends Client {
     private String currentProcessName;
     private int countOfNeededProductsAndInstruments;
 
+    public Cooker(String name, int port) {
+        super(name, port);
+
+        currentProcessName = "";
+        countOfNeededProductsAndInstruments = 0;
+        askForTheWork();
+    }
+
     public Cooker(Socket socket, String clientName) {
         super(socket, clientName);
 
@@ -70,7 +78,8 @@ public class Cooker extends Client {
 
             sendMessage(neededDishRequest);
 
-            logger.log(Level.INFO, this.clientName + ": Received work request from Kitchen and got assigned to work on " + currentProcessName);
+            logger.log(Level.INFO, this.clientName + ": Received work request from Kitchen and got assigned to work on "
+                    + currentProcessName);
         } catch (Exception e) {
             logger.log(Level.SEVERE, this.clientName + ": Error while getting work from Kitchen", e);
         }
@@ -93,7 +102,8 @@ public class Cooker extends Client {
                         product.getId());
                 sendMessage(productRequest);
 
-                logger.log(Level.INFO,this.clientName + ": Sent product request to Storage for product with ID: " + product.getId());
+                logger.log(Level.INFO,
+                        this.clientName + ": Sent product request to Storage for product with ID: " + product.getId());
             }
 
             for (String instrument : instruments) {
@@ -102,7 +112,8 @@ public class Cooker extends Client {
 
                 sendMessage(instrumentRequest);
 
-                logger.log(Level.INFO,this.clientName + ": Sent instrument request to Kitchen for instrument: " + instrument);
+                logger.log(Level.INFO,
+                        this.clientName + ": Sent instrument request to Kitchen for instrument: " + instrument);
             }
 
         } catch (Exception e) {
@@ -129,7 +140,8 @@ public class Cooker extends Client {
 
             sendMessage(processStart);
 
-            logger.log(Level.INFO,this.clientName + ": All products and instruments have arrived, starting work on " + currentProcessName);
+            logger.log(Level.INFO, this.clientName + ": All products and instruments have arrived, starting work on "
+                    + currentProcessName);
         } catch (Exception e) {
             logger.log(Level.SEVERE, this.clientName + ": Error while starting work", e);
         }

@@ -37,9 +37,6 @@ public class App {
             Kitchen kitchen = new Kitchen(AgentNames.KITCHEN, 5001);
             startClient(kitchen);
 
-            Storage storage = new Storage(AgentNames.STORAGE, 5001);
-            startClient(storage);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,34 +70,26 @@ public class App {
             System.out.println(e.getMessage());
         }
 
-        /*
-         * try {
-         * ServerSocket serverSocket = new ServerSocket(5001);
-         * Socket socket = new Socket(); // TODO: Create sockets properly
-         * Server server = new Server(serverSocket);
-         * new Thread(server).start();
-         * Administrator administrator = new Administrator(socket, AgentNames.ADMIN);
-         * new Thread(administrator).start();
-         * Storage storage = new Storage(socket, AgentNames.STORAGE, products,
-         * fullMenu);
-         * new Thread(storage).start();
-         * for (String visitorName : visitors) {
-         * Visitor visitor = new Visitor(socket, visitorName);
-         * new Thread(visitor).start();
-         * }
-         * for (String cookerName : cookers) {
-         * Cooker cooker = new Cooker(socket, cookerName);
-         * new Thread(cooker).start();
-         * }
-         * for (InstrumentObject instrumentObject : instrumentObjects) {
-         * Instrument instrument = new Instrument(socket, instrumentObject.getId(),
-         * instrumentObject.getName());
-         * new Thread(instrument).start();
-         * }
-         * } catch (Exception e) {
-         * System.out.println(e.getMessage());
-         * }
-         */
+        try {
+            Storage storage = new Storage(AgentNames.STORAGE, 5001, products,
+                    fullMenu);
+            startClient(storage);
+            for (String visitorName : visitors) {
+                Visitor visitor = new Visitor(visitorName, 5001);
+                startClient(visitor);
+            }
+            for (String cookerName : cookers) {
+                Cooker cooker = new Cooker(cookerName, 5001);
+                startClient(cooker);
+            }
+            for (InstrumentObject instrumentObject : instrumentObjects) {
+                Instrument instrument = new Instrument(instrumentObject.getId(), 5001,
+                        instrumentObject.getName());
+                startClient(instrument);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
