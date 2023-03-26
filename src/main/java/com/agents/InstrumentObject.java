@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class InstrumentObject {
     private String id;
     private String name;
+    public InstrumentObject() {
+        id = "";
+        name = "";
+    }
     public InstrumentObject(String id, String name) {
         this.id = id;
         this.name = name;
@@ -32,8 +36,8 @@ public class InstrumentObject {
         return mapper.writeValueAsString(this);
     }
 
-    public static Message fromJson(String json) throws JsonProcessingException {
+    public static InstrumentObject fromJson(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, Message.class);
+        return mapper.readValue(json, InstrumentObject.class);
     }
 }

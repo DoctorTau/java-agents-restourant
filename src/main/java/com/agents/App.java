@@ -12,10 +12,9 @@ import java.util.ArrayList;
 
 /**
  * Hello world!
- *
  */
 public class App {
-    public static void main( String[] args ) {
+    private void createEverythingFromJson() {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<String> visitors = new ArrayList<>();
         Menu fullMenu = new Menu();
@@ -23,21 +22,26 @@ public class App {
         ArrayList<InstrumentObject> instrumentObjects = new ArrayList<>();
         ArrayList<String> cookers = new ArrayList<>();
         try {
-            File visitorsFile = new File("src/main/java/com.agents/jsons/visitors.json");
-            File fullMenuFile = new File("src/main/java/com.agents/jsons/fullmenu.json");
-            File productsFile = new File("src/main/java/com.agents/jsons/products.json");
-            File instrumentsFile = new File("src/main/java/com.agents/jsons/instruments.json");
-            File cookersFile = new File("src/main/java/com.agents/jsons/cooker.json");
-            visitors = objectMapper.readValue(visitorsFile, new TypeReference<ArrayList<String>>() {});
+            File visitorsFile = new File("src/main/java/com/agents/jsons/visitors.json");
+            File fullMenuFile = new File("src/main/java/com/agents/jsons/fullmenu.json");
+            File productsFile = new File("src/main/java/com/agents/jsons/products.json");
+            File instrumentsFile = new File("src/main/java/com/agents/jsons/instruments.json");
+            File cookersFile = new File("src/main/java/com/agents/jsons/cookers.json");
+            visitors = objectMapper.readValue(visitorsFile, new TypeReference<ArrayList<String>>() {
+            });
             fullMenu = objectMapper.readValue(fullMenuFile, Menu.class);
-            products = objectMapper.readValue(productsFile, new TypeReference<ArrayList<Product>>() {});
-            instrumentObjects = objectMapper.readValue(instrumentsFile, new TypeReference<ArrayList<InstrumentObject>>() {});
-            cookers = objectMapper.readValue(cookersFile, new TypeReference<ArrayList<String>>() {});
+            products = objectMapper.readValue(productsFile, new TypeReference<ArrayList<Product>>() {
+            });
+            instrumentObjects = objectMapper.readValue(instrumentsFile, new TypeReference<ArrayList<InstrumentObject>>() {
+            });
+            cookers = objectMapper.readValue(cookersFile, new TypeReference<ArrayList<String>>() {
+            });
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
+        /*
         try {
             ServerSocket serverSocket = new ServerSocket(5001);
             Socket socket = new Socket();                               // TODO: Create sockets properly
@@ -62,5 +66,10 @@ public class App {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        */
+    }
+
+    public static void main(String[] args) {
+
     }
 }

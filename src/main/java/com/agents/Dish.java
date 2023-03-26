@@ -11,6 +11,12 @@ public class Dish {
     private ArrayList<String> instruments;
     private int time;
 
+    public Dish() {
+        name = "";
+        products = new ArrayList<>();
+        instruments = new ArrayList<>();
+        time = 0;
+    }
     public Dish(String name, ArrayList<Product> products, ArrayList<String> instruments, int time) {
         this.name = name;
         this.products = products;

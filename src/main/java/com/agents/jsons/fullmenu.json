@@ -1,0 +1,26 @@
+{
+  "dishes": [
+    {
+      "name": "Borshcht",
+      "products": [
+        {
+          "id": "Tomato",
+          "status": "FREE"
+        },
+        {
+          "id": "Water",
+          "status": "FREE"
+        },
+        {
+          "id": "Meet",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+        "pot",
+        "spoon"
+      ],
+      "time": 1000
+    }
+  ]
+}
