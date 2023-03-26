@@ -6,12 +6,16 @@ import com.agents.Dish;
 import com.agents.Message;
 import com.agents.MessageType;
 import com.agents.Product;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Cooker extends Client {
+    private static final Logger logger = Logger.getLogger(Cooker.class.getName());
+
     private String currentProcessName;
     private int countOfNeededProductsAndInstruments;
 
@@ -44,7 +48,8 @@ public class Cooker extends Client {
                 getAProductOrAnInstrument();
                 break;
             case ProcessRespond:
-                // Reset the current process name and the count of needed products and instruments
+                // Reset the current process name and the count of needed products and
+                // instruments
                 currentProcessName = "";
                 countOfNeededProductsAndInstruments = 0;
                 // Ask for the work
@@ -66,9 +71,11 @@ public class Cooker extends Client {
                     MessageType.DishRequestRespond);
 
             sendMessage(neededDishRequest);
+
+            logger.log(Level.INFO, this.clientName + ": Received work request from Kitchen and got assigned to work on "
+                    + currentProcessName);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // TODO
+            logger.log(Level.SEVERE, this.clientName + ": Error while getting work from Kitchen", e);
         }
     }
 
@@ -93,8 +100,7 @@ public class Cooker extends Client {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // TODO
+            logger.log(Level.SEVERE, this.clientName + ": Error while asking for products and instruments", e);
         }
     }
 
@@ -108,6 +114,7 @@ public class Cooker extends Client {
                 MessageType.InstrumentsRequest, instrument);
 
         sendMessage(instrumentRequest);
+        logger.log(Level.INFO, this.clientName + ": Sent instrument request to Kitchen for instrument: " + instrument);
     }
 
     /**
@@ -132,6 +139,8 @@ public class Cooker extends Client {
             Message message = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
                     product.getId());
             sendMessage(message);
+            logger.log(Level.INFO,
+                    this.clientName + ": Sent product request to Storage for product with ID: " + product.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -154,9 +163,11 @@ public class Cooker extends Client {
             Message processStart = new Message(currentProcessName, this.clientName, MessageType.ProcessRequest);
 
             sendMessage(processStart);
+
+            logger.log(Level.INFO, this.clientName + ": All products and instruments have arrived, starting work on "
+                    + currentProcessName);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // TODO
+            logger.log(Level.SEVERE, this.clientName + ": Error while starting work", e);
         }
     }
 
@@ -168,9 +179,10 @@ public class Cooker extends Client {
             Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.WorkRequest);
 
             sendMessage(workRequest);
+
+            logger.log(Level.INFO, this.clientName + ": Asking for the new work");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // TODO
+            logger.log(Level.SEVERE, this.clientName + ": Error while asking for the new work", e);
         }
     }
 }

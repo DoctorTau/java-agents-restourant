@@ -7,16 +7,24 @@ import com.agents.MessageType;
 import java.net.Socket;
 import java.util.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Kitchen extends Client {
+    private final Logger logger = Logger.getLogger(Kitchen.class.getName());
+
     Queue<String> processQueue;
     Queue<String> cookerQueue;
     Map<String, Queue<String>> cookersToInstrumentsQueues;
-    ArrayList<String> instrumentsList;
+    Map<String, Queue<String>> instrumentsQueues;
 
     public Kitchen(Socket socket, String clientName) {
         super(socket, clientName);
 
         cookersToInstrumentsQueues = new HashMap<>();
+        processQueue = new LinkedList<>();
+        cookerQueue = new LinkedList<>();
+        instrumentsQueues = new HashMap<>();
     }
 
     @Override
@@ -39,7 +47,7 @@ public class Kitchen extends Client {
                 break;
             case InstrumentsRespond:
                 // Ask the cooker to get an instrument
-                getAnInstrument(message.getSource());
+                getAnInstrument(message.getSource(), message.getData());
                 break;
             default:
                 break;
@@ -54,6 +62,7 @@ public class Kitchen extends Client {
     private void getAProcess(String processName) {
         if (cookerQueue.isEmpty()) {
             processQueue.add(processName);
+            logger.log(Level.INFO, "Added process {0} to process queue", processName);
         } else {
             provideAProcess(processName, cookerQueue.remove());
         }
@@ -67,6 +76,7 @@ public class Kitchen extends Client {
     private void getACooker(String cookerName) {
         if (processQueue.isEmpty()) {
             cookerQueue.add(cookerName);
+            logger.log(Level.INFO, "Added cooker {0} to cooker queue", cookerName);
         } else {
             provideAProcess(processQueue.remove(), cookerName);
         }
@@ -88,9 +98,11 @@ public class Kitchen extends Client {
 
             sendMessage(workRespond);
             sendMessage(processLink);
+
+            logger.log(Level.INFO, "Provided process {0} to cooker {1}", new Object[] { processName, cookerName });
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // TODO
+            logger.log(Level.SEVERE, "Exception occurred while providing process {0} to cooker {1}",
+                    new Object[] { processName, cookerName });
         }
     }
 
@@ -99,9 +111,14 @@ public class Kitchen extends Client {
      * 
      * @param instrumentName the name of the instrument
      */
-    private void getAnInstrument(String instrumentName) {
+    private void getAnInstrument(String instrumentAgentName, String instrumentName) {
         if (cookersToInstrumentsQueues.get(instrumentName).isEmpty()) {
-            instrumentsList.add(instrumentName);
+            Queue<String> instrumentAgents = instrumentsQueues.get(instrumentName);
+            instrumentAgents.add(instrumentAgentName);
+            instrumentsQueues.put(instrumentName, instrumentAgents);
+
+            logger.log(Level.INFO, "Added instrument agent {0} to instrument queue {1}",
+                    new Object[] { instrumentAgentName, instrumentName });
         } else {
             Queue<String> cookers = cookersToInstrumentsQueues.get(instrumentName);
             String cookerName = cookers.remove();
@@ -116,13 +133,19 @@ public class Kitchen extends Client {
      * @param instrumentName the name of the instrument
      * @param cookerName     the name of the cooker
      */
-    private void getAnInstrumentRequestFromTheCooker(String instrumentName, String cookerName) {
-        if (!instrumentsList.contains(instrumentName)) {
+    private void getAnInstrumentRequestFromTheCooker(String cookerName, String instrumentName) {
+        if (instrumentsQueues.get(instrumentName).isEmpty()) {
             Queue<String> cookers = cookersToInstrumentsQueues.get(instrumentName);
             cookers.add(cookerName);
             cookersToInstrumentsQueues.put(instrumentName, cookers);
+
+            logger.log(Level.INFO, "Added cooker {0} to the queue for the instrument {1}",
+                    new Object[] { cookerName, instrumentName });
         } else {
-            provideAnInstrument(instrumentName, cookerName);
+            Queue<String> instrumentAgents = instrumentsQueues.get(instrumentName);
+            String instrumentAgentName = instrumentAgents.remove();
+            instrumentsQueues.put(instrumentName, instrumentAgents);
+            provideAnInstrument(instrumentAgentName, cookerName);
         }
     }
 
@@ -136,6 +159,7 @@ public class Kitchen extends Client {
         try {
             Message instrumentRespond = new Message(cookerName, this.clientName, MessageType.InstrumentsRespond);
             sendMessage(instrumentRespond);
+            logger.log(Level.INFO, "Provided an instrument " + instrumentName + " to " + cookerName);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // TODO

@@ -6,12 +6,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Visitor extends Client {
+
+    private static final Logger logger = Logger.getLogger(Visitor.class.getName());
 
     public Visitor(Socket socket, String clientName) {
         super(socket, clientName);
 
+        logger.log(Level.INFO, "Visitor object created with client name " + clientName);
         askForTheMenu();
     }
 
@@ -22,11 +27,15 @@ public class Visitor extends Client {
         }
         switch (message.getType()) {
             case MenuRespond:
-                // Make an order by the menu
-                makeInOrderByMenu(message);
+                try {
+                    makeInOrderByMenu(message);
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, this.clientName + ": Failed to make an order", e);
+                }
                 break;
             case OrderRespond:
                 // Get an order for the customer
+                logger.log(Level.INFO, this.clientName + ": Order response received");
                 getAnOrder();
                 break;
             default:
@@ -42,6 +51,7 @@ public class Visitor extends Client {
     private void makeInOrderByMenu(Message message) {
         try {
             Menu currentMenu = Menu.fromJson(message.getData());
+            logger.log(Level.INFO, this.clientName + ": Menu response received with menu " + currentMenu);
             makeAnOrder(currentMenu);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -54,10 +64,10 @@ public class Visitor extends Client {
     private void askForTheMenu() {
         try {
             Message menuRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.MenuRequest);
-
+            logger.log(Level.INFO, this.clientName + ": Menu request message sent to " + AgentNames.ADMIN);
             sendMessage(menuRequest);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.SEVERE, this.clientName + ": Failed to send message", e);
         }
     }
 
@@ -81,11 +91,11 @@ public class Visitor extends Client {
         try {
             Message orderRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.OrderRequest,
                     order.toJson());
-
+            logger.log(Level.INFO,
+                    this.clientName + ": Order request message sent to " + AgentNames.ADMIN + " with order " + order);
             sendMessage(orderRequest);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // TODO
+            logger.log(Level.SEVERE, this.clientName + ": Failed to send message", e);
         }
     }
 
