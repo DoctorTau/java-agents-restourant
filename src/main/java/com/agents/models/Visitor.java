@@ -21,7 +21,7 @@ public class Visitor extends Client {
             return;
         }
         switch (message.getType()) {
-            case MenuResponse:
+            case MenuRespond:
                 try {
                     Menu currentMenu = Menu.fromJson(message.getData());
                     makeAnOrder(currentMenu);

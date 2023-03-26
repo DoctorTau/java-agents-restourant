@@ -21,7 +21,7 @@ public class Administrator extends Client {
                 case MenuRequest:
                     requestMenuFromStorage(message);
                     break;
-                case MenuResponse:
+                case MenuRespond:
                     provideMenuToTheClient(message);
                     break;
                 default:
@@ -44,7 +44,7 @@ public class Administrator extends Client {
     private void provideMenuToTheClient(Message message) throws JsonProcessingException {
         VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
         Message menuResponse = new Message(visitorMenu.getVisitorname(), AgentNames.ADMIN,
-                MessageType.MenuResponse,
+                MessageType.MenuRespond,
                 visitorMenu.getMenu().toJson());
         sendMessage(menuResponse);
     }

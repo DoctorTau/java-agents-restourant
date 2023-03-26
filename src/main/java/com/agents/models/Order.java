@@ -41,11 +41,11 @@ public class Order extends Client {
 
             for (Dish dish : dishes) {
                 String processName = dish.getName() + "For" + visitorName;
-                Process process = new Process(socket, processName, this.clientName, dish.getTime());
+                Process process = new Process(socket, processName, this.clientName, dish);
                 new Thread(process);
 
                 Message processAdd = new Message(AgentNames.KITCHEN, this.clientName, MessageType.ProcessRequest,
-                        dish.toJson());
+                        processName);
 
                 sendMessage(processAdd);
             }
