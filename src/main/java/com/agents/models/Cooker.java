@@ -15,6 +15,8 @@ public class Cooker extends Client {
     private String currentProcessName;
     private int countOfNeededProductsAndInstruments;
 
+    private ArrayList<Product> products;
+
     public Cooker(Socket socket, String clientName) {
         super(socket, clientName);
 
@@ -30,19 +32,27 @@ public class Cooker extends Client {
         }
         switch (message.getType()) {
             case WorkRespond:
+                // Get the work from the message
                 getAWork(message);
                 break;
             case DishRequestRespond:
+                // Ask for products and instruments
                 askForProductsAndInstruments(message);
                 break;
             case InstrumentsRespond:
-            case ProductRespond:
+                // Get a product or an instrument
                 getAProductOrAnInstrument();
                 break;
             case ProcessRespond:
+                // Reset the current process name and the count of needed products and instruments
                 currentProcessName = "";
                 countOfNeededProductsAndInstruments = 0;
+                // Ask for the work
                 askForTheWork();
+                break;
+            case ProductRespond:
+                // Add the product to the inventory
+                addProduct(message);
                 break;
             default:
                 break;
@@ -62,6 +72,11 @@ public class Cooker extends Client {
         }
     }
 
+    /**
+     * Asks for products and instruments.
+     * 
+     * @param message Message with the dish's id.
+     */
     private void askForProductsAndInstruments(Message message) {
         try {
             Dish dish = Dish.fromJson(message.getData());
@@ -70,16 +85,11 @@ public class Cooker extends Client {
             countOfNeededProductsAndInstruments = products.size() + instruments.size();
 
             for (Product product : products) {
-                Message productRequest = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
-                        product.getId());
-                sendMessage(productRequest);
+                askForPoduct(product);
             }
 
             for (String instrument : instruments) {
-                Message instrumentRequest = new Message(AgentNames.KITCHEN, this.clientName,
-                        MessageType.InstrumentsRequest, instrument);
-
-                sendMessage(instrumentRequest);
+                askForInstrument(instrument);
             }
 
         } catch (Exception e) {
@@ -88,6 +98,21 @@ public class Cooker extends Client {
         }
     }
 
+    /**
+     * Asks for an instrument from the kitchen.
+     * 
+     * @param instrument The name of the instrument.
+     */
+    private void askForInstrument(String instrument) {
+        Message instrumentRequest = new Message(AgentNames.KITCHEN, this.clientName,
+                MessageType.InstrumentsRequest, instrument);
+
+        sendMessage(instrumentRequest);
+    }
+
+    /**
+     * Decreases the number of needed products and instruments. If the number is 0,
+     */
     private void getAProductOrAnInstrument() {
         --countOfNeededProductsAndInstruments;
         if (countOfNeededProductsAndInstruments == 0) {
@@ -95,6 +120,35 @@ public class Cooker extends Client {
         }
     }
 
+    /**
+     * Asks for a product from the storage.
+     * 
+     * @param product The product.
+     */
+    private void askForPoduct(Product product) {
+        try {
+            // Sends a request for the product to the storage. In request body is the
+            // product's id.
+            Message message = new Message(AgentNames.STORAGE, this.clientName, MessageType.ProductRequest,
+                    product.getId());
+            sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds a product from the storage.
+     * 
+     * @param message Message with the product's id.
+     */
+    private void addProduct(Message message) {
+        products.add(new Product(message.getData()));
+    }
+
+    /**
+     * Sends a message to the procces that the process has started.
+     */
     private void startWorking() {
         try {
             Message processStart = new Message(currentProcessName, this.clientName, MessageType.ProcessRequest);
@@ -106,6 +160,9 @@ public class Cooker extends Client {
         }
     }
 
+    /**
+     * Asks for the work from the kitchen.
+     */
     private void askForTheWork() {
         try {
             Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.WorkRequest);

@@ -27,14 +27,9 @@ public class Storage extends Client {
     @Override
     protected void handleMessage(Message message) {
         try {
-            switch (message.getType()) {// TODO
+            switch (message.getType()) {
                 case MenuRequest:
-                    Menu currentMenu = new Menu();
-                    fillMenu(currentMenu);
-                    VisitorMenu visitorMenu = new VisitorMenu(message.getData(), currentMenu);
-                    Message menuMessage = new Message(AgentNames.ADMIN, AgentNames.STORAGE, MessageType.MenuRespond,
-                            visitorMenu.toJson());
-                    sendMessage(menuMessage);
+                    sendCurrentMenu(message);
                     break;
                 case OrderRequest:
                     reserveProductsForMenu(message);
@@ -50,6 +45,26 @@ public class Storage extends Client {
         }
     }
 
+    /**
+     * Provides menu to the client.
+     * 
+     * @param message - message with the client name
+     * @throws JsonProcessingException - if there is an error while parsing json
+     */
+    private void sendCurrentMenu(Message message) throws JsonProcessingException {
+        Menu currentMenu = new Menu();
+        fillMenu(currentMenu);
+        VisitorMenu visitorMenu = new VisitorMenu(message.getData(), currentMenu);
+        Message menuMessage = new Message(AgentNames.ADMIN, AgentNames.STORAGE, MessageType.MenuRespond,
+                visitorMenu.toJson());
+        sendMessage(menuMessage);
+    }
+
+    /**
+     * Fills the menu with dishes that are possible to cook with the available
+     * 
+     * @param currentMenu - menu to be filled
+     */
     private void fillMenu(Menu currentMenu) {
         for (Dish dish : full_menu.getDishes()) {
             if (dish.isPossible(getAvailableProducts())) {
@@ -103,6 +118,11 @@ public class Storage extends Client {
         }
     }
 
+    /**
+     * Sends a product to the client.
+     * 
+     * @param message - message with the product id
+     */
     private void sendProduct(Message message) {
         String productId = message.getData();
         for (Product product : products) {
@@ -118,6 +138,11 @@ public class Storage extends Client {
         // TODO: send message to logger that there is no such product
     }
 
+    /**
+     * Removes a product from the storage.
+     * 
+     * @param product - product to be removed
+     */
     private void removeProduct(Product product) {
         products.remove(product);
     }

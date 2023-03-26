@@ -33,6 +33,12 @@ public class Order extends Client {
         }
     }
 
+    /**
+     * Sends the order to the kitchen
+     * 
+     * @param message
+     *                a message sent by the client
+     */
     private void sendOrderToTheKitchen(Message message) {
         try {
             menu = Menu.fromJson(message.getData());
@@ -55,6 +61,11 @@ public class Order extends Client {
         }
     }
 
+    /**
+     * Sends the order to the storage
+     *
+     * @param message the order
+     */
     private void sendOrderToStorage(Message message) {
         try {
             Message orderNotification = new Message(AgentNames.STORAGE, this.clientName, MessageType.OrderRequest,
@@ -66,6 +77,9 @@ public class Order extends Client {
         }
     }
 
+    /**
+     * Decreases the number of processes in work and sends the order to the client
+     */
     private void processIsDone() {
         --countOfProcessesInWork;
         if (countOfProcessesInWork == 0) {
@@ -73,6 +87,9 @@ public class Order extends Client {
         }
     }
 
+    /**
+     * Sends the order to the client
+     */
     private void orderIsReady() {
         try {
             Message orderNotification = new Message(AgentNames.ADMIN, this.clientName, MessageType.OrderRespond,

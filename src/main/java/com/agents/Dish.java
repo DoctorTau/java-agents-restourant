@@ -30,6 +30,12 @@ public class Dish {
         return products;
     }
 
+    /**
+     * Checks if all products are available
+     * 
+     * @param availoble_products list of available products
+     * @return true if all products are available and false otherwise
+     */
     public boolean isPossible(ArrayList<Product> availoble_products) {
         for (Product product : products) {
             if (!availoble_products.contains(product)) {

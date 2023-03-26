@@ -22,14 +22,11 @@ public class Visitor extends Client {
         }
         switch (message.getType()) {
             case MenuRespond:
-                try {
-                    Menu currentMenu = Menu.fromJson(message.getData());
-                    makeAnOrder(currentMenu);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                // Make an order by the menu
+                makeInOrderByMenu(message);
                 break;
             case OrderRespond:
+                // Get an order for the customer
                 getAnOrder();
                 break;
             default:
@@ -37,6 +34,23 @@ public class Visitor extends Client {
         }
     }
 
+    /**
+     * Sends gets a menu from message and makes an order by it.
+     * 
+     * @param message a message with a menu
+     */
+    private void makeInOrderByMenu(Message message) {
+        try {
+            Menu currentMenu = Menu.fromJson(message.getData());
+            makeAnOrder(currentMenu);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a request for the menu to the admin.
+     */
     private void askForTheMenu() {
         try {
             Message menuRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.MenuRequest);
@@ -47,6 +61,11 @@ public class Visitor extends Client {
         }
     }
 
+    /**
+     * Makes an order by the menu.
+     * 
+     * @param menu a menu
+     */
     private void makeAnOrder(Menu menu) {
         Random random = new Random();
         ArrayList<Dish> dishes = menu.getDishes();

@@ -40,6 +40,11 @@ public class Administrator extends Client {
         }
     }
 
+    /**
+     * Send a request to the storage agent for the menu
+     *
+     * @param message the message that contains the source of the request
+     */
     private void requestMenuFromStorage(Message message) {
         Message menuRequest = new Message(AgentNames.STORAGE, AgentNames.ADMIN, MessageType.MenuRequest,
                 message.getSource());
@@ -77,6 +82,11 @@ public class Administrator extends Client {
         }
     }
 
+    /**
+     * This method is used to get the order from the client
+     *
+     * @param message
+     */
     private void giveOrderToTheClient(Message message) {
         Message orderResponse = new Message(message.getData(), AgentNames.ADMIN, MessageType.OrderRespond,
                 message.getSource());
