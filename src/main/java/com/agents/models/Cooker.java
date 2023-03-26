@@ -148,7 +148,7 @@ public class Cooker extends Client {
     /**
      * Asks Administrator for the new work
      */
-    private void askForTheWork() {
+    public void askForTheWork() {
         try {
             Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.WorkRequest);
 

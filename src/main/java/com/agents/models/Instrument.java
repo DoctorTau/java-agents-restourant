@@ -36,7 +36,7 @@ public class Instrument extends Client {
         }
     }
 
-    private void askForTheWork() {
+    public void askForTheWork() {
         try {
             Message workRequest = new Message(AgentNames.KITCHEN, this.clientName, MessageType.InstrumentsRespond,
                     name);

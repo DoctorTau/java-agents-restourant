@@ -37,6 +37,7 @@ public class Administrator extends Client {
                     provideMenuToTheClient(message);
                     break;
                 case OrderRequest:
+                    logger.info("Order request received from: " + message.getSource());
                     createOrder(message);
                 case OrderRespond:
                     giveOrderToTheClient(message);
@@ -82,11 +83,13 @@ public class Administrator extends Client {
     private void createOrder(Message message) {
         try {
             String orderName = message.getSource() + "Order";
-            Order order = new Order(this.socket, orderName, message.getSource());
+            Order order = new Order(orderName, this.socketPort, message.getSource());
             order.startClient();
+            Thread.sleep(500);
 
             Message orderRequest = new Message(orderName, this.clientName, MessageType.OrderRequest, message.getData());
             sendMessage(orderRequest);
+            logger.info("Order created for the visitor " + message.getSource());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             logger.log(Level.SEVERE, "An error occurred while creating order for the visitor " + message.getSource(),

@@ -14,6 +14,12 @@ public class Order extends Client {
     private int countOfProcessesInWork;
     private final String visitorName;
 
+    public Order(String clientName, int port, String visitorName) {
+        super(clientName, port);
+
+        this.visitorName = visitorName;
+    }
+
     public Order(Socket socket, String clientName, String visitorName) {
         super(socket, clientName);
 
@@ -27,6 +33,7 @@ public class Order extends Client {
         }
         switch (message.getType()) {
             case OrderRequest:
+                logger.info("Received order request from " + message.getSource() + " for " + visitorName);
                 sendOrderToTheKitchen(message);
                 sendOrderToStorage(message);
                 break;
@@ -53,8 +60,8 @@ public class Order extends Client {
 
             for (Dish dish : dishes) {
                 String processName = dish.getName() + "For" + visitorName;
-                Process process = new Process(socket, processName, this.clientName, dish);
-                new Thread(process).start();
+                Process process = new Process(processName, this.socketPort, this.clientName, dish);
+                process.startClient();
 
                 Message processAdd = new Message(AgentNames.KITCHEN, this.clientName, MessageType.ProcessRequest,
                         processName);
@@ -91,7 +98,8 @@ public class Order extends Client {
      */
     private void processIsDone() {
         --countOfProcessesInWork;
-        logger.log(Level.INFO, this.clientName + ": Received process completion notification, " + countOfProcessesInWork + " processes remaining");
+        logger.log(Level.INFO, this.clientName + ": Received process completion notification, " + countOfProcessesInWork
+                + " processes remaining");
         if (countOfProcessesInWork == 0) {
             orderIsReady();
         }

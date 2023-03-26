@@ -57,7 +57,7 @@ public class Visitor extends Client {
             logger.log(Level.INFO, this.clientName + ": Menu response received with menu " + currentMenu);
             makeAnOrder(currentMenu);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.SEVERE, this.clientName + ": Failed to make an order", e);
         }
     }
 
@@ -67,8 +67,8 @@ public class Visitor extends Client {
     public void askForTheMenu() {
         try {
             Message menuRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.MenuRequest);
-            logger.log(Level.INFO, this.clientName + ": Menu request message sent to " + AgentNames.ADMIN);
             sendMessage(menuRequest);
+            logger.log(Level.INFO, this.clientName + ": Menu request message sent to " + AgentNames.ADMIN);
         } catch (Exception e) {
             logger.log(Level.SEVERE, this.clientName + ": Failed to send message", e);
         }
@@ -82,7 +82,12 @@ public class Visitor extends Client {
     private void makeAnOrder(Menu menu) {
         Random random = new Random();
         ArrayList<Dish> dishes = menu.getDishes();
-        int countOfDishes = random.nextInt(Math.min(5, dishes.size()));
+        if (dishes.size() == 0) {
+            logger.log(Level.INFO, this.clientName + ": No dishes in the menu. Client leaving.");
+            this.finishClient();
+            return;
+        }
+        int countOfDishes = random.nextInt(0, Math.min(5, dishes.size() + 1));
         Menu order = new Menu();
 
         for (int i = 0; i < countOfDishes; ++i) {
@@ -91,12 +96,21 @@ public class Visitor extends Client {
             dishes.remove(dishIndex);
         }
 
+        if (order.getDishes().size() == 0) {
+            logger.log(Level.INFO, this.clientName + ": No dishes in the order. Client leaving.");
+            this.finishClient();
+            return;
+        }
+
         try {
             Message orderRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.OrderRequest,
                     order.toJson());
-            logger.log(Level.INFO,
-                    this.clientName + ": Order request message sent to " + AgentNames.ADMIN + " with order " + order);
+
             sendMessage(orderRequest);
+
+            logger.log(Level.INFO,
+                    this.clientName + ": Order request message sent to " + AgentNames.ADMIN + " with order "
+                            + order.toJson());
         } catch (Exception e) {
             logger.log(Level.SEVERE, this.clientName + ": Failed to send message", e);
         }

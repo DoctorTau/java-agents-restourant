@@ -17,6 +17,12 @@ public class Storage extends Client {
         super(clientName, port);
         this.products = products;
         this.fullMenu = fullMenu;
+
+        try {
+            logger.log(Level.INFO, "Storage created. With menu: " + fullMenu.toJson());
+        } catch (JsonProcessingException e) {
+            logger.log(Level.SEVERE, "Error while parsing json", e);
+        }
     }
 
     public Storage(Socket socket, String clientName, ArrayList<Product> products, Menu fullMenu) {

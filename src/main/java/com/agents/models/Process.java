@@ -18,6 +18,13 @@ public class Process extends Client {
     private String cookerName;
     private final Logger logger;
 
+    public Process(String clientName, int port, String orderName, Dish dish) {
+        super(clientName, port);
+        this.orderName = orderName;
+        this.dish = dish;
+        this.logger = Logger.getLogger(Process.class.getName());
+    }
+
     /**
      * @param socket     a socket to communicate with the server
      * @param clientName a name of the client

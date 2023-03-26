@@ -46,6 +46,8 @@ public class App {
 
             Thread.sleep(1000);
             startOrders();
+            startCookersWorker();
+            startInstrumentsWorker();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,6 +130,24 @@ public class App {
             if (client instanceof Visitor) {
                 Visitor visitor = (Visitor) client;
                 visitor.askForTheMenu();
+            }
+        }
+    }
+
+    private static void startCookersWorker() {
+        for (Client client : clients) {
+            if (client instanceof Cooker) {
+                Cooker cooker = (Cooker) client;
+                cooker.askForTheWork();
+            }
+        }
+    }
+
+    private static void startInstrumentsWorker() {
+        for (Client client : clients) {
+            if (client instanceof Instrument) {
+                Instrument instrument = (Instrument) client;
+                instrument.askForTheWork();
             }
         }
     }
