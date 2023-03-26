@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class VisitorMenu {
-    public String visitor_name;
+    public String visitorName;
     public Menu menu;
 
     public Menu getMenu() {
@@ -15,16 +15,21 @@ public class VisitorMenu {
         this.menu = menu;
     }
 
-    public String getVisitorname() {
-        return visitor_name;
+    public String getVisitorName() {
+        return visitorName;
     }
 
-    public void setVisitor_name(String visitor_name) {
-        this.visitor_name = visitor_name;
+    public void setVisitorName(String visitorName) {
+        this.visitorName = visitorName;
     }
 
-    public VisitorMenu(String visitor_name, Menu menu) {
-        this.visitor_name = visitor_name;
+    public VisitorMenu() {
+        this.visitorName = "";
+        this.menu = new Menu();
+    }
+
+    public VisitorMenu(String visitorName, Menu menu) {
+        this.visitorName = visitorName;
         this.menu = menu;
     }
 

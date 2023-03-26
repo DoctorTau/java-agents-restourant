@@ -16,14 +16,12 @@ public class Visitor extends Client {
         super(clientName, port);
 
         logger.log(Level.INFO, "Visitor object created with client name " + clientName);
-        askForTheMenu();
     }
 
     public Visitor(Socket socket, String clientName) {
         super(socket, clientName);
 
         logger.log(Level.INFO, "Visitor object created with client name " + clientName);
-        askForTheMenu();
     }
 
     @Override
@@ -66,7 +64,7 @@ public class Visitor extends Client {
     /**
      * Sends a request for the menu to the admin.
      */
-    private void askForTheMenu() {
+    public void askForTheMenu() {
         try {
             Message menuRequest = new Message(AgentNames.ADMIN, this.clientName, MessageType.MenuRequest);
             logger.log(Level.INFO, this.clientName + ": Menu request message sent to " + AgentNames.ADMIN);

@@ -24,7 +24,6 @@ public class Cooker extends Client {
 
         currentProcessName = "";
         countOfNeededProductsAndInstruments = 0;
-        askForTheWork();
     }
 
     public Cooker(Socket socket, String clientName) {
@@ -32,7 +31,6 @@ public class Cooker extends Client {
 
         currentProcessName = "";
         countOfNeededProductsAndInstruments = 0;
-        askForTheWork();
     }
 
     @Override

@@ -64,11 +64,11 @@ public class Administrator extends Client {
     private void provideMenuToTheClient(Message message) {
         try {
             VisitorMenu visitorMenu = VisitorMenu.fromJson(message.getData());
-            Message menuResponse = new Message(visitorMenu.getVisitorname(), AgentNames.ADMIN,
+            Message menuResponse = new Message(visitorMenu.getVisitorName(), AgentNames.ADMIN,
                     MessageType.MenuRespond,
                     visitorMenu.getMenu().toJson());
             sendMessage(menuResponse);
-            logger.log(Level.INFO, "Sent menu response to the client " + visitorMenu.getVisitorname()
+            logger.log(Level.INFO, "Sent menu response to the client " + visitorMenu.getVisitorName()
                     + " with the following menu: " + visitorMenu.getMenu().toJson());
         } catch (Exception e) {
             logger.log(Level.SEVERE, "An error occurred while providing menu to the visitor " + message.getSource(), e);

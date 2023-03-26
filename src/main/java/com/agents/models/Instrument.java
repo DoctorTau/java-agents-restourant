@@ -15,13 +15,11 @@ public class Instrument extends Client {
     public Instrument(String clientName, int port, String name) {
         super(clientName, port);
         this.name = name;
-        askForTheWork();
     }
 
     public Instrument(Socket socket, String clientName, String name) {
         super(socket, clientName);
         this.name = name;
-        askForTheWork();
     }
 
     @Override

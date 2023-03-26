@@ -83,7 +83,7 @@ public class Client implements Runnable {
         this.messageToSend = message;
         try {
             synchronized (messageToSendLock) {
-                messageToSendLock.notify();
+                messageToSendLock.notifyAll();
                 messageToSendLock.wait();
             }
 
@@ -97,7 +97,7 @@ public class Client implements Runnable {
         try {
             messageToSend.setData(message);
             synchronized (messageToSendLock) {
-                messageToSendLock.notify();
+                messageToSendLock.notifyAll();
                 messageToSendLock.wait();
             }
 

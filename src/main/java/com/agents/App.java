@@ -1,23 +1,19 @@
 package com.agents;
 
-import com.agents.models.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.File;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-
 import java.net.ServerSocket;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.agents.models.Administrator;
+import com.agents.models.Cooker;
+import com.agents.models.Instrument;
 import com.agents.models.Kitchen;
 import com.agents.models.Storage;
+import com.agents.models.Visitor;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class App {
     private static ArrayList<Client> clients = new ArrayList<>();
@@ -37,12 +33,26 @@ public class App {
             Kitchen kitchen = new Kitchen(AgentNames.KITCHEN, 5001);
             startClient(kitchen);
 
+            Thread.sleep(1000);
+
+            Message message = new Message(AgentNames.KITCHEN, AgentNames.ADMIN, MessageType.Ping, AgentNames.ADMIN);
+            administrator.sendMessage(message);
+            Thread.sleep(1000);
+
+            Message message2 = new Message(AgentNames.ADMIN, AgentNames.KITCHEN, MessageType.Ping, AgentNames.KITCHEN);
+            kitchen.sendMessage(message2);
+
+            createEverythingFromJson();
+
+            Thread.sleep(1000);
+            startOrders();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void createEverythingFromJson() {
+    private static void createEverythingFromJson() {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<String> visitors = new ArrayList<>();
         Menu fullMenu = new Menu();
@@ -113,4 +123,12 @@ public class App {
         }
     }
 
+    private static void startOrders() {
+        for (Client client : clients) {
+            if (client instanceof Visitor) {
+                Visitor visitor = (Visitor) client;
+                visitor.askForTheMenu();
+            }
+        }
+    }
 }
