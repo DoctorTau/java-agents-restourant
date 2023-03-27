@@ -7,10 +7,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -24,39 +28,36 @@ public class ClientHandler implements Runnable {
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.clientName = bufferedReader.readLine();
             clients.add(this);
-            broadcastAll("SERVER " + clientName + " has entered the server.");
+            // broadcastAll("SERVER " + clientName + " has entered the server.");
 
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
 
-    private void sendMessageByClientName(String clientName) {
-        for (ClientHandler clientHandler : clients) {
-            if (clientHandler.clientName.equals(clientName)) {
+    private void broadcastAll(String messageToSend) {
+        try {
+            Message message = Message.fromJson(messageToSend);
+            for (ClientHandler clientHandler : clients) {
                 try {
-                    clientHandler.bufferedWriter.write("SERVER " + this.clientName + " has left the server.");
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
+                    if (message.getDestination().equals("") && !clientHandler.clientName.equals(this.clientName)) {
+                        writeToWriteredBuffer(messageToSend, clientHandler);
+                    } else if (clientHandler.clientName.equals(message.getDestination())) {
+                        writeToWriteredBuffer(messageToSend, clientHandler);
+                    }
                 } catch (IOException e) {
                     closeEverything(socket, bufferedReader, bufferedWriter);
                 }
             }
+        } catch (JsonProcessingException e) {
+            logger.severe("Failed to parse message: " + messageToSend + " " + e.getMessage());
         }
     }
 
-    private void broadcastAll(String messageToSend) {
-        for (ClientHandler clientHandler : clients) {
-            try {
-                if (!clientHandler.clientName.equals(this.clientName)) {
-                    clientHandler.bufferedWriter.write(messageToSend);
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
-                }
-            } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
-            }
-        }
+    private void writeToWriteredBuffer(String messageToSend, ClientHandler clientHandler) throws IOException {
+        clientHandler.bufferedWriter.write(messageToSend);
+        clientHandler.bufferedWriter.newLine();
+        clientHandler.bufferedWriter.flush();
     }
 
     @Override
@@ -91,7 +92,7 @@ public class ClientHandler implements Runnable {
                 bufferedWriter.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Failed to close socket, bufferedReader or bufferedWriter: " + e.getMessage());
         }
     }
 }

@@ -1,0 +1,79 @@
+{
+  "dishes": [
+    {
+      "name": "Borshcht",
+      "products": [
+        {
+          "id": "Tomato",
+          "status": "FREE"
+        },
+        {
+          "id": "Water",
+          "status": "FREE"
+        },
+        {
+          "id": "Meet",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+        "Pot",
+        "Ladle"
+      ],
+      "time": 5000
+    },
+    {
+      "name": "Cheese plate",
+      "products": [
+        {
+          "id": "Parmesan",
+          "status": "FREE"
+        },
+        {
+          "id": "Cheddar",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+        "Grater"
+      ],
+      "time": 6000
+    },
+    {
+      "name": "Mac and cheese",
+      "products": [
+        {
+          "id": "Cheddar",
+          "status": "FREE"
+        },
+        {
+          "id": "Spaghetti",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [],
+      "time": 3500
+    },
+    {
+      "name": "Bolognese",
+      "products": [
+        {
+          "id": "Parmesan",
+          "status": "FREE"
+        },
+        {
+          "id": "Spaghetti",
+          "status": "FREE"
+        },
+        {
+          "id": "Tomato",
+          "status": "FREE"
+        }
+      ],
+      "instruments": [
+        "Grater"
+      ],
+      "time": 7500
+    }
+  ]
+}

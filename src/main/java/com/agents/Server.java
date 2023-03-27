@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server implements Runnable {
 
     private ServerSocket serverSocket;
 
@@ -12,6 +12,9 @@ public class Server {
         this.serverSocket = serverSocket;
     }
 
+    /**
+     * Starts the server.
+     */
     public void startServer() {
         try {
             while (!serverSocket.isClosed()) {
@@ -28,6 +31,9 @@ public class Server {
 
     }
 
+    /**
+     * Closes the server socket.
+     */
     public void closeSocket() {
         try {
             if (serverSocket != null) {
@@ -46,6 +52,11 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run() {
+        this.startServer();
     }
 
 }
