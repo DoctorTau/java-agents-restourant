@@ -1,0 +1,364 @@
+{
+    "level": "INFO",
+    "message": "Client admin started"
+}
+{
+    "level": "INFO",
+    "message": "Ping from kitchen received"
+}
+{
+    "level": "INFO",
+    "message": "Storage created. With menu: {"dishes":[{"name":"Borshcht","products":[{"id":"Tomato","status":"FREE"},{"id":"Water","status":"FREE"},{"id":"Meet","status":"FREE"}],"instruments":["Pot","Ladle"],"time":5000},{"name":"Cheese plate","products":[{"id":"Parmesan","status":"FREE"},{"id":"Cheddar","status":"FREE"}],"instruments":["Grater"],"time":6000},{"name":"Mac and cheese","products":[{"id":"Cheddar","status":"FREE"},{"id":"Spaghetti","status":"FREE"}],"instruments":[],"time":3500},{"name":"Bolognese","products":[{"id":"Parmesan","status":"FREE"},{"id":"Spaghetti","status":"FREE"},{"id":"Tomato","status":"FREE"}],"instruments":["Grater"],"time":7500}]}"
+}
+{
+    "level": "INFO",
+    "message": "Client storage started"
+}
+{
+    "level": "INFO",
+    "message": "Visitor object created with client name Daniil Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Client Daniil Shatravka started"
+}
+{
+    "level": "INFO",
+    "message": "Visitor object created with client name Alexey Stepanov"
+}
+{
+    "level": "INFO",
+    "message": "Client Alexey Stepanov started"
+}
+{
+    "level": "INFO",
+    "message": "Visitor object created with client name Gregory Sosnovsky"
+}
+{
+    "level": "INFO",
+    "message": "Client Gregory Sosnovsky started"
+}
+{
+    "level": "INFO",
+    "message": "Client Bebey started"
+}
+{
+    "level": "INFO",
+    "message": "Client Papich started"
+}
+{
+    "level": "INFO",
+    "message": "Client ladle1 started"
+}
+{
+    "level": "INFO",
+    "message": "Client ladle2 started"
+}
+{
+    "level": "INFO",
+    "message": "Client pot1 started"
+}
+{
+    "level": "INFO",
+    "message": "Client pot2 started"
+}
+{
+    "level": "INFO",
+    "message": "Client grater1 started"
+}
+{
+    "level": "INFO",
+    "message": "Bebey: Asking for the new work"
+}
+{
+    "level": "INFO",
+    "message": "Added cooker {0} to cooker queue"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Asking for the new work"
+}
+{
+    "level": "INFO",
+    "message": "Added cooker {0} to cooker queue"
+}
+{
+    "level": "INFO",
+    "message": "ladle1: Sent work request from  for Ladle"
+}
+{
+    "level": "INFO",
+    "message": "ladle2: Sent work request from  for Ladle"
+}
+{
+    "level": "INFO",
+    "message": "Added instrument agent {0} to instrument queue {1}"
+}
+{
+    "level": "INFO",
+    "message": "pot1: Sent work request from  for Pot"
+}
+{
+    "level": "INFO",
+    "message": "Added instrument agent {0} to instrument queue {1}"
+}
+{
+    "level": "INFO",
+    "message": "pot2: Sent work request from  for Pot"
+}
+{
+    "level": "INFO",
+    "message": "Added instrument agent {0} to instrument queue {1}"
+}
+{
+    "level": "INFO",
+    "message": "grater1: Sent work request from  for Grater"
+}
+{
+    "level": "INFO",
+    "message": "Added instrument agent {0} to instrument queue {1}"
+}
+{
+    "level": "INFO",
+    "message": "Added instrument agent {0} to instrument queue {1}"
+}
+{
+    "level": "INFO",
+    "message": "Daniil Shatravka: Menu request message sent to admin"
+}
+{
+    "level": "INFO",
+    "message": "Sent menu to the admin."
+}
+{
+    "level": "INFO",
+    "message": "Sent menu response to the client Daniil Shatravka with the following menu: {"dishes":[{"name":"Borshcht","products":[{"id":"Tomato","status":"FREE"},{"id":"Water","status":"FREE"},{"id":"Meet","status":"FREE"}],"instruments":["Pot","Ladle"],"time":5000},{"name":"Cheese plate","products":[{"id":"Parmesan","status":"FREE"},{"id":"Cheddar","status":"FREE"}],"instruments":["Grater"],"time":6000},{"name":"Mac and cheese","products":[{"id":"Cheddar","status":"FREE"},{"id":"Spaghetti","status":"FREE"}],"instruments":[],"time":3500},{"name":"Bolognese","products":[{"id":"Parmesan","status":"FREE"},{"id":"Spaghetti","status":"FREE"},{"id":"Tomato","status":"FREE"}],"instruments":["Grater"],"time":7500}]}"
+}
+{
+    "level": "INFO",
+    "message": "Daniil Shatravka: Menu response received with menu com.agents.Menu@1a0847fe"
+}
+{
+    "level": "INFO",
+    "message": "Order request received from: Daniil Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Daniil Shatravka: Order request message sent to admin with order {"dishes":[{"name":"Bolognese","products":[{"id":"Parmesan","status":"FREE"},{"id":"Spaghetti","status":"FREE"},{"id":"Tomato","status":"FREE"}],"instruments":["Grater"],"time":7500},{"name":"Mac and cheese","products":[{"id":"Cheddar","status":"FREE"},{"id":"Spaghetti","status":"FREE"}],"instruments":[],"time":3500},{"name":"Cheese plate","products":[{"id":"Parmesan","status":"FREE"},{"id":"Cheddar","status":"FREE"}],"instruments":["Grater"],"time":6000}]}"
+}
+{
+    "level": "INFO",
+    "message": "Order created for the visitor Daniil Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Received order request from admin for Daniil Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Sending order to kitchen"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Sent process request for BologneseForDaniil_Shatravka to kitchen"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Sent process request for Mac_and_cheeseForDaniil_Shatravka to kitchen"
+}
+{
+    "level": "INFO",
+    "message": "Provided process {0} to cooker {1}"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Sent process request for Cheese_plateForDaniil_Shatravka to kitchen"
+}
+{
+    "level": "INFO",
+    "message": "Bebey: Received work request from Kitchen and got assigned to work on BologneseForDaniil_Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Sending order to storage"
+}
+{
+    "level": "INFO",
+    "message": "Provided process {0} to cooker {1}"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Received work request from Kitchen and got assigned to work on Mac_and_cheeseForDaniil_Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Sent order request to storage"
+}
+{
+    "level": "INFO",
+    "message": "Added process {0} to process queue"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Parmesan"
+}
+{
+    "level": "INFO",
+    "message": "Bebey: Sent product request to Storage for product with ID: Parmesan"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Spaghetti"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Sent product request to Storage for product with ID: Cheddar"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Tomato"
+}
+{
+    "level": "INFO",
+    "message": "Bebey: Sent product request to Storage for product with ID: Spaghetti"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Cheddar"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Sent product request to Storage for product with ID: Spaghetti"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Spaghetti"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Parmesan"
+}
+{
+    "level": "INFO",
+    "message": "Bebey: Sent product request to Storage for product with ID: Tomato"
+}
+{
+    "level": "INFO",
+    "message": "Reserved product with id Cheddar"
+}
+{
+    "level": "INFO",
+    "message": "Reserved products for the order"
+}
+{
+    "level": "INFO",
+    "message": "Bebey: Sent instrument request to Kitchen for instrument: Grater"
+}
+{
+    "level": "INFO",
+    "message": "Added cooker {0} to the queue for the instrument {1}"
+}
+{
+    "level": "INFO",
+    "message": "Product with ID Parmesan has been removed from storage"
+}
+{
+    "level": "INFO",
+    "message": "Product with ID Cheddar has been removed from storage"
+}
+{
+    "level": "INFO",
+    "message": "Product with ID Spaghetti has been removed from storage"
+}
+{
+    "level": "INFO",
+    "message": "Product with ID Spaghetti has been removed from storage"
+}
+{
+    "level": "INFO",
+    "message": "Papich: All products and instruments have arrived, starting work on Mac_and_cheeseForDaniil_Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Product with ID Tomato has been removed from storage"
+}
+{
+    "level": "INFO",
+    "message": "Alexey Stepanov: Menu request message sent to admin"
+}
+{
+    "level": "INFO",
+    "message": "Sent menu to the admin."
+}
+{
+    "level": "INFO",
+    "message": "Sent menu response to the client Alexey Stepanov with the following menu: {"dishes":[{"name":"Borshcht","products":[{"id":"Tomato","status":"FREE"},{"id":"Water","status":"FREE"},{"id":"Meet","status":"FREE"}],"instruments":["Pot","Ladle"],"time":5000}]}"
+}
+{
+    "level": "INFO",
+    "message": "Alexey Stepanov: Menu response received with menu com.agents.Menu@e89267c"
+}
+{
+    "level": "INFO",
+    "message": "Alexey Stepanov: No dishes in the order. Client leaving."
+}
+{
+    "level": "INFO",
+    "message": "Papich: Asking for the new work"
+}
+{
+    "level": "INFO",
+    "message": "Daniil_ShatravkaOrder: Received process completion notification, 2 processes remaining"
+}
+{
+    "level": "INFO",
+    "message": "Provided process {0} to cooker {1}"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Received work request from Kitchen and got assigned to work on Cheese_plateForDaniil_Shatravka"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Sent product request to Storage for product with ID: Parmesan"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Sent product request to Storage for product with ID: Cheddar"
+}
+{
+    "level": "WARNING",
+    "message": "Product with ID Parmesan not found or not reserved"
+}
+{
+    "level": "INFO",
+    "message": "Papich: Sent instrument request to Kitchen for instrument: Grater"
+}
+{
+    "level": "INFO",
+    "message": "Added cooker {0} to the queue for the instrument {1}"
+}
+{
+    "level": "INFO",
+    "message": "Product with ID Cheddar has been removed from storage"
+}
+{
+    "level": "INFO",
+    "message": "Gregory Sosnovsky: Menu request message sent to admin"
+}
+{
+    "level": "INFO",
+    "message": "Sent menu to the admin."
+}
+{
+    "level": "INFO",
+    "message": "Sent menu response to the client Gregory Sosnovsky with the following menu: {"dishes":[{"name":"Borshcht","products":[{"id":"Tomato","status":"FREE"},{"id":"Water","status":"FREE"},{"id":"Meet","status":"FREE"}],"instruments":["Pot","Ladle"],"time":5000}]}"
+}
+{
+    "level": "INFO",
+    "message": "Gregory Sosnovsky: Menu response received with menu com.agents.Menu@3a32f664"
+}
+{
+    "level": "INFO",
+    "message": "Gregory Sosnovsky: No dishes in the order. Client leaving."
+}

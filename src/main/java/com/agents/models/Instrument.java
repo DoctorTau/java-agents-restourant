@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Instrument extends Client {
-    private static final Logger logger = Logger.getLogger(Instrument.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     private final String name;
 

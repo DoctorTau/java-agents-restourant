@@ -4,6 +4,7 @@ import com.agents.AgentNames;
 import com.agents.Client;
 import com.agents.Message;
 import com.agents.MessageType;
+import com.agents.MyLogger;
 import com.agents.VisitorMenu;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.logging.Logger;
@@ -13,7 +14,7 @@ import java.net.Socket;
 
 public class Administrator extends Client {
 
-    private static final Logger logger = Logger.getLogger(Administrator.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     public Administrator(String clientName, int port) {
         super(clientName, port);

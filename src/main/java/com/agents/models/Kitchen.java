@@ -3,6 +3,7 @@ package com.agents.models;
 import com.agents.Client;
 import com.agents.Message;
 import com.agents.MessageType;
+import com.agents.MyLogger;
 
 import java.net.Socket;
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Kitchen extends Client {
-    private final Logger logger = Logger.getLogger(Kitchen.class.getName());
+    private final Logger logger = MyLogger.getLogger();
 
     Queue<String> processQueue;
     Queue<String> cookerQueue;

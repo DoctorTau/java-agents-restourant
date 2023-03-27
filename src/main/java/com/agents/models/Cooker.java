@@ -5,6 +5,7 @@ import com.agents.Client;
 import com.agents.Dish;
 import com.agents.Message;
 import com.agents.MessageType;
+import com.agents.MyLogger;
 import com.agents.Product;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Cooker extends Client {
-    private static final Logger logger = Logger.getLogger(Cooker.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     private String currentProcessName;
     private int countOfNeededProductsAndInstruments;

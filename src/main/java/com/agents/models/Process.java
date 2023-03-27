@@ -4,6 +4,7 @@ import com.agents.Client;
 import com.agents.Dish;
 import com.agents.Message;
 import com.agents.MessageType;
+import com.agents.MyLogger;
 
 import java.net.Socket;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class Process extends Client {
         super(socket, clientName);
         this.orderName = orderName;
         this.dish = dish;
-        this.logger = Logger.getLogger(Process.class.getName());
+        this.logger = MyLogger.getLogger();
     }
 
     @Override

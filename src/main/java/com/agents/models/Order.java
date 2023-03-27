@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Order extends Client {
-    private static final Logger logger = Logger.getLogger(Order.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     private int countOfProcessesInWork;
     private final String visitorName;

@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Visitor extends Client {
-    private static final Logger logger = Logger.getLogger(Visitor.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     public Visitor(String clientName, int port) {
         super(clientName, port);

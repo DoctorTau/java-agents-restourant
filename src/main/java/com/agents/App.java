@@ -15,7 +15,7 @@ import com.agents.models.Visitor;
 
 public class App {
     private static ArrayList<Client> clients = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(App.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     public static void main(String[] args) {
         try {

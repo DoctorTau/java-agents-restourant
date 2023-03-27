@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
 
     private Socket socket;
     private BufferedReader bufferedReader;

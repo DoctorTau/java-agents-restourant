@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Storage extends Client {
-    private static final Logger logger = Logger.getLogger(Storage.class.getName());
+    private static final Logger logger = MyLogger.getLogger();
     private final ArrayList<Product> products;
     private final Menu fullMenu;
 
