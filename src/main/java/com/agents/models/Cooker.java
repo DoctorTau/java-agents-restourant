@@ -41,7 +41,7 @@ public class Cooker extends Client {
         switch (message.getType()) {
             case WorkRespond:
                 // Gets the work from the Administrator
-                getAWork(message);
+                getWork(message);
                 break;
             case DishRequestRespond:
                 // Gets the ordered dish from the Process
@@ -68,7 +68,7 @@ public class Cooker extends Client {
      *
      * @param message message from the Administrator
      */
-    private void getAWork(Message message) {
+    private void getWork(Message message) {
         try {
             currentProcessName = message.getData();
             Message neededDishRequest = new Message(currentProcessName, this.clientName,
@@ -134,7 +134,8 @@ public class Cooker extends Client {
      */
     private void startWorking() {
         try {
-            Message processStart = new Message(currentProcessName, this.clientName, MessageType.ProcessRequest);
+            Message processStart = new Message(currentProcessName, this.clientName, MessageType.ProcessRequest,
+                    this.clientName);
 
             sendMessage(processStart);
 

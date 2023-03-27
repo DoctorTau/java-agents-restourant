@@ -46,20 +46,20 @@ public class Kitchen extends Client {
                 logger.log(Level.INFO, "Ping from " + message.getSource() + " received");
                 break;
             case ProcessRequest:
-                // Ask the cooker to get a process
-                getAProcess(message.getData());
+                // Get a process to give to a cooker
+                getProcess(message.getData());
                 break;
             case WorkRequest:
                 // Ask the cooker to get a cooker
-                getACooker(message.getSource());
+                getCooker(message.getSource());
                 break;
             case InstrumentsRequest:
                 // Ask the cooker to get an instrument
-                getAnInstrumentRequestFromTheCooker(message.getData(), message.getSource());
+                getInstrumentRequestFromCooker(message.getData(), message.getSource());
                 break;
             case InstrumentsRespond:
                 // Ask the cooker to get an instrument
-                getAnInstrument(message.getSource(), message.getData());
+                getInstrument(message.getSource(), message.getData());
                 break;
             default:
                 break;
@@ -71,12 +71,12 @@ public class Kitchen extends Client {
      * 
      * @param processName the name of the process
      */
-    private void getAProcess(String processName) {
+    private void getProcess(String processName) {
         if (cookerQueue.isEmpty()) {
             processQueue.add(processName);
             logger.log(Level.INFO, "Added process {0} to process queue", processName);
         } else {
-            provideAProcess(processName, cookerQueue.remove());
+            provideProcess(processName, cookerQueue.remove());
         }
     }
 
@@ -85,12 +85,12 @@ public class Kitchen extends Client {
      * 
      * @param cookerName the name of the cooker
      */
-    private void getACooker(String cookerName) {
+    private void getCooker(String cookerName) {
         if (processQueue.isEmpty()) {
             cookerQueue.add(cookerName);
             logger.log(Level.INFO, "Added cooker {0} to cooker queue", cookerName);
         } else {
-            provideAProcess(processQueue.remove(), cookerName);
+            provideProcess(processQueue.remove(), cookerName);
         }
     }
 
@@ -100,16 +100,12 @@ public class Kitchen extends Client {
      * @param processName the name of the process
      * @param cookerName  the name of the cooker
      */
-    private void provideAProcess(String processName, String cookerName) {
+    private void provideProcess(String processName, String cookerName) {
         try {
             Message workRespond = new Message(cookerName, this.clientName, MessageType.WorkRespond,
                     processName);
 
-            Message processLink = new Message(processName, this.clientName, MessageType.ProcessRequest,
-                    cookerName);
-
             sendMessage(workRespond);
-            sendMessage(processLink);
 
             logger.log(Level.INFO, "Provided process {0} to cooker {1}", new Object[] { processName, cookerName });
         } catch (Exception e) {
@@ -123,7 +119,7 @@ public class Kitchen extends Client {
      * 
      * @param instrumentName the name of the instrument
      */
-    private void getAnInstrument(String instrumentAgentName, String instrumentName) {
+    private void getInstrument(String instrumentAgentName, String instrumentName) {
         checkInstrument(instrumentName);
         if (cookersToInstrumentsQueues.get(instrumentName).isEmpty()) {
             Queue<String> instrumentAgents = instrumentsQueues.get(instrumentName);
@@ -146,7 +142,7 @@ public class Kitchen extends Client {
      * @param instrumentName the name of the instrument
      * @param cookerName     the name of the cooker
      */
-    private void getAnInstrumentRequestFromTheCooker(String cookerName, String instrumentName) {
+    private void getInstrumentRequestFromCooker(String cookerName, String instrumentName) {
         checkInstrument(instrumentName);
         if (instrumentsQueues.get(instrumentName).isEmpty()) {
             Queue<String> cookers = cookersToInstrumentsQueues.get(instrumentName);

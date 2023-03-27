@@ -86,6 +86,7 @@ public class Administrator extends Client {
     private void createOrder(Message message) {
         try {
             String orderName = message.getSource() + "Order";
+            orderName = orderName.replace(" ", "_");
             Order order = new Order(orderName, this.socketPort, message.getSource());
             order.startClient();
             Thread.sleep(500);

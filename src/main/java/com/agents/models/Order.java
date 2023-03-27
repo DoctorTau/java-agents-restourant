@@ -60,6 +60,7 @@ public class Order extends Client {
 
             for (Dish dish : dishes) {
                 String processName = dish.getName() + "For" + visitorName;
+                processName = processName.replace(" ", "_");
                 Process process = new Process(processName, this.socketPort, this.clientName, dish);
                 process.startClient();
 
