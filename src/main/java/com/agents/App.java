@@ -1,6 +1,5 @@
 package com.agents;
 
-import java.io.File;
 import java.net.ServerSocket;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import com.agents.models.Instrument;
 import com.agents.models.Kitchen;
 import com.agents.models.Storage;
 import com.agents.models.Visitor;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class App {
     private static ArrayList<Client> clients = new ArrayList<>();
@@ -57,36 +54,24 @@ public class App {
     }
 
     private static void createEverythingFromJson() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayList<String> visitors = new ArrayList<>();
-        Menu fullMenu = new Menu();
-        ArrayList<Product> products = new ArrayList<>();
-        ArrayList<InstrumentObject> instrumentObjects = new ArrayList<>();
-        ArrayList<String> cookers = new ArrayList<>();
         try {
-            File visitorsFile = new File("src/main/java/com/agents/jsons/visitors.json");
-            File fullMenuFile = new File("src/main/java/com/agents/jsons/fullmenu.json");
-            File productsFile = new File("src/main/java/com/agents/jsons/products.json");
-            File instrumentsFile = new File("src/main/java/com/agents/jsons/instruments.json");
-            File cookersFile = new File("src/main/java/com/agents/jsons/cookers.json");
-            visitors = objectMapper.readValue(visitorsFile, new TypeReference<ArrayList<String>>() {
-            });
-            fullMenu = objectMapper.readValue(fullMenuFile, Menu.class);
-            products = objectMapper.readValue(productsFile, new TypeReference<ArrayList<Product>>() {
-            });
-            instrumentObjects = objectMapper.readValue(instrumentsFile,
-                    new TypeReference<ArrayList<InstrumentObject>>() {
-                    });
-            cookers = objectMapper.readValue(cookersFile, new TypeReference<ArrayList<String>>() {
-            });
-
+            JsonReader jsonReader = new JsonReader();
+            ArrayList<String> visitors = jsonReader.readVisitors("src/main/java/com/agents/jsons/visitors.json");
+            Menu fullMenu = jsonReader.readMenu("src/main/java/com/agents/jsons/fullmenu.json");
+            ArrayList<Product> products = jsonReader.readProducts("src/main/java/com/agents/jsons/products.json");
+            ArrayList<InstrumentObject> instrumentObjects = jsonReader
+                    .readInstrumentObjects("src/main/java/com/agents/jsons/instruments.json");
+            ArrayList<String> cookers = jsonReader.readCookers("src/main/java/com/agents/jsons/cookers.json");
+            createClients(visitors, cookers, instrumentObjects, fullMenu, products);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.severe("Error while parsing a JSON" + e.getMessage());
         }
+    }
 
+    private static void createClients(ArrayList<String> visitors, ArrayList<String> cookers,
+            ArrayList<InstrumentObject> instrumentObjects, Menu fullMenu, ArrayList<Product> products) {
         try {
-            Storage storage = new Storage(AgentNames.STORAGE, 5001, products,
-                    fullMenu);
+            Storage storage = new Storage(AgentNames.STORAGE, 5001, products, fullMenu);
             startClient(storage);
             for (String visitorName : visitors) {
                 Visitor visitor = new Visitor(visitorName, 5001);
@@ -97,8 +82,7 @@ public class App {
                 startClient(cooker);
             }
             for (InstrumentObject instrumentObject : instrumentObjects) {
-                Instrument instrument = new Instrument(instrumentObject.getId(), 5001,
-                        instrumentObject.getName());
+                Instrument instrument = new Instrument(instrumentObject.getId(), 5001, instrumentObject.getName());
                 startClient(instrument);
             }
         } catch (Exception e) {

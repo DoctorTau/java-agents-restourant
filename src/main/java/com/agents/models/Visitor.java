@@ -117,6 +117,6 @@ public class Visitor extends Client {
     }
 
     private void getAnOrder() {
-        logger.log(Level.INFO, this.clientName + ": Order response received");
+        logger.log(Level.INFO, this.clientName + ": Order response received \n Client is happy and leaving!!!");
     }
 }

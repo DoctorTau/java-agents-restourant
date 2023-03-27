@@ -20,7 +20,7 @@
         "Pot",
         "Ladle"
       ],
-      "time": 2000
+      "time": 5000
     },
     {
       "name": "Cheese plate",
@@ -37,7 +37,7 @@
       "instruments": [
         "Grater"
       ],
-      "time": 1000
+      "time": 6000
     },
     {
       "name": "Mac and cheese",
@@ -51,9 +51,8 @@
           "status": "FREE"
         }
       ],
-      "instruments": [
-      ],
-      "time": 1500
+      "instruments": [],
+      "time": 3500
     },
     {
       "name": "Bolognese",
@@ -74,7 +73,7 @@
       "instruments": [
         "Grater"
       ],
-      "time": 1500
+      "time": 7500
     }
   ]
 }

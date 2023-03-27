@@ -7,12 +7,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -48,7 +50,7 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.severe("Failed to parse message: " + messageToSend + " " + e.getMessage());
         }
     }
 
@@ -90,7 +92,7 @@ public class ClientHandler implements Runnable {
                 bufferedWriter.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Failed to close socket, bufferedReader or bufferedWriter: " + e.getMessage());
         }
     }
 }

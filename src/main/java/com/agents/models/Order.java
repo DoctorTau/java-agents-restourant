@@ -100,7 +100,7 @@ public class Order extends Client {
         --countOfProcessesInWork;
         logger.log(Level.INFO, this.clientName + ": Received process completion notification, " + countOfProcessesInWork
                 + " processes remaining");
-        if (countOfProcessesInWork == 0) {
+        if (countOfProcessesInWork < 1) {
             orderIsReady();
         }
     }
