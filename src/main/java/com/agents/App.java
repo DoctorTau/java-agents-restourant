@@ -49,7 +49,9 @@ public class App {
             startOrders();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.severe("Error on program run.");
+
+            stopClients();
         }
     }
 
