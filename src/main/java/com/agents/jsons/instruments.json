@@ -1,14 +1,22 @@
 [
   {
-    "id": "spoon1",
-    "name": "spoon"
+    "id": "ladle1",
+    "name": "Ladle"
+  },
+  {
+    "id": "ladle2",
+    "name": "Ladle"
   },
   {
     "id": "pot1",
-    "name": "pot"
+    "name": "Pot"
   },
   {
     "id": "pot2",
-    "name": "pot2"
+    "name": "Pot"
+  },
+  {
+    "id": "grater1",
+    "name": "Grater"
   }
 ]
